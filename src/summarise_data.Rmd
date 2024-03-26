@@ -1,6 +1,6 @@
 ---
-title: "Donor iron supplement perception data summary FI"
-author: "Mikko Arvas"
+title: "Summary of hemochromatosis questionnaire answers"
+author: "Elina Koskinen, Jonna Clancy and Mikko Arvas"
 date: "`r Sys.time()`"
 output:
   html_document:
@@ -13,7 +13,6 @@ output:
 
 
 ```{r setup, include=FALSE}
-#echo "rmarkdown::render('summarise_data.Rmd', clean=TRUE,output_format='html_document',output_file='../results/summarise_data.html')" | R --slave
 knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,
@@ -28,7 +27,7 @@ library(here)
 #install.packages("devtools")
 #library(devtools)
 # install_github("markolalovic/responsesR")
-library(responsesR)
+#library(responsesR)
 ```
 
 
@@ -38,7 +37,13 @@ library(responsesR)
 
 ```{r}
 file <- here("data/Tulokset - hemokromatoosikysely vastaukset (ID 133620).xlsx")
-data <- read_xlsx(file)
+data <- read_xlsx(file,n_max = 60)
+if (TRUE) { # But if this is fixed in xlsx you don't need to do this
+  summary(data)
+  data <- data %>% rename(
+    Kys2Gender = K2Gender
+  )
+}
 summary(data)
 ```
 
@@ -46,103 +51,145 @@ summary(data)
 ## Simulate
 
 ```{r}
+if (TRUE) { # if you have data you set this to false
+  source("../../responsesR/R/responses.R") 
+  # you should be able to load the library instead of just sourcing it from cloned folder
+  #hop this will be fixed soon
+  age <- round(rnorm(n=60,mean=40,sd =10))
+  data_likert_4<- genLikert(size = 60,items = 1, levels=4, location=c(-1))
+  data_likert_5<- genLikert(size = 60,items = 3, levels=5, location=c(-1,-1),correlation = 0.5)
+  data_likert_11<- genLikert(size = 60,items = 1, levels=11, location=c(1))
+  ferritin <- rlnorm(n=60,meanlog = 3,sdlog = 1)
+  data <- data %>% mutate(
+    Kys1Age   = age ,    
+    Kys2Gender       = case_when(
+      data_likert_4$X == 1 ~ "Women",
+      data_likert_4$X == 2 ~ "Men",
+      data_likert_4$X == 3 ~ "Non-binary/other",
+      data_likert_4$X == 4 ~ "Don't wish to respond"),
+      
+    Kys3DonationCount =  case_when(
+      data_likert_11$X ==    1 ~ "None",
+      data_likert_11$X ==  2 ~"1-10",
+      data_likert_11$X ==3 ~ "11-20",
+      data_likert_11$X ==4 ~ "21-30",
+      data_likert_11$X ==5 ~ "31-40",
+      data_likert_11$X ==6 ~ "51-60",
+      data_likert_11$X ==7 ~ "61-70",
+      data_likert_11$X ==8 ~ "71-80",
+      data_likert_11$X ==9 ~ "81-90",
+      data_likert_11$X ==10 ~ "91-100",
+      data_likert_11$X == 11 ~ "Over 100"
+      
+    ),
+    Kys4YearStarted   = 2024 - age - round(rnorm(n=60,mean = 10, sd = 5 )),
+    Kys5         =   data_likert_5$X1,
+    Kys6         = data_likert_5$X2,
+    Kys20aLabResults  = ferritin,
+    Kys21  =   data_likert_5$X3,
+  )
+  
+  summary(data)
+}
+```
 
+## Process
 
+```{r}
 
+data <-  data %>% 
+  mutate(
+    Kys2Gender = factor(Kys2Gender),
+    Kys3DonationCount = factor(Kys3DonationCount,ordered = TRUE),
+    Kys5 = factor(
+      Kys5,
+      ordered = TRUE,
+      levels = 1:5,
+      labels =  c("Totally agree","Agree","Neutral","Disagree","Totally disagree")
+    ),
+    Kys6 = factor(
+      Kys6,
+      ordered = TRUE,
+      levels = 1:5,
+      labels = c("Totally agree","Agree","Neutral","Disagree","Totally disagree")
+    ),
+    Kys21 = factor(Kys5,ordered = TRUE)
+  )
+summary(data)
 ```
 
 
 
 # Demographics
 
-## Age
+## Age by Gender
 
 ```{r}
 
-p <- ggplot(data %>% filter( `2: What is your gender?` == "Male" | `2: What is your gender?` == "Female"))
-p <- p +  geom_histogram(aes(x=`1: What is your age?`),binwidth = 5)
-p <- p + facet_wrap(. ~ `2: What is your gender?`)
+p <- ggplot(data)
+p <- p +  geom_histogram(aes(x=Kys1Age),binwidth = 5)
+p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p + xlab("Age in years")
 p
 
 ```
 
 
-Looks quite different from our normal donation population. Make explicit comparisons later.
-
-
-```{r}
-data2<- data
-colnames(data2) <- str_replace_all(colnames(data2),pattern = " ", "_") %>% 
-  str_replace_all(.,".*:_","") %>% 
-  str_replace_all(.,"\\?","") %>% 
-  str_replace_all(.,",","")
-
-```
-
+## Demographics Table 1
 
 ```{r}
 
-table2 <-
+table1 <-
   tbl_summary(
-    data2,
+    data %>% rename(
+      Age =  Kys1Age,
+      YearStarted = Kys4YearStarted,
+      DonationCount = Kys3DonationCount
+    ),
     include = c(
-      What_is_your_age,
-      In_what_kind_of_area_are_you_do_you_live,
-      What_is_the_highest_form_of_education_which_you_have_completed,
-      In_general_how_do_you_rate_your_health,
-      Do_you_currently_eat_a_vegetarian_or_vegan_diet
+      Age,
+      YearStarted,  
+      DonationCount
       ),
-    #by = What_is_your_gender, # split table by group
-    missing = "no" # don't list missing data separately
+    by =  Kys2Gender
+    
   ) %>%
   add_n()  # add column with total number of non-missing observations
-table2
-```
-
-
-## Donation history
-
-```{r}
-table3 <-
-  tbl_summary(
-    data2,
-    include = c(
-      How_many_times_have_you_donated_whole_blood_in_your_lifetime,
-      When_was_your_most_recent_donation,
-      ),
-    #by = What_is_your_gender, # split table by group
-    missing = "no" # don't list missing data separately
-  ) %>%
-  add_n()  # add column with total number of non-missing observations
-table3
-
+table1
 ```
 
 
 
-# Blood service conduct
+
+# Distributions of Likert scale questions
 
 
 ```{r , warning=FALSE}
-items = data2 %>% 
-    select(which(str_detect(colnames(data) ,"^10\\.\\d"))) 
+items = data %>% 
+    select(Kys5,Kys6) 
 
-colnames(items) <- str_replace_all(string = colnames(items),pattern = "_",replacement = " " )
+colnames(items) <- c("It was useful to receive genetic information","Receiving genetic information did not make me worry")
 
 nlevels = 5
 ```
 
 
 ```{r , warning=FALSE}
-q10 <- likert(
+q01 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
   
 )
-plot(q10, 
+plot(q01, 
      type = "heat",
      legend.position = "bottom",
      text.size=3,
      include.histogram = FALSE)
 ```
 
+add all the questions here
+
+
+# Distributions of lab values
+
+add here like age
