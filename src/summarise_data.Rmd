@@ -26,7 +26,7 @@ library(here)
 #install.packages("devtools")
 #library(devtools)
 # install_github("markolalovic/responsesR")
-#library(responsesR)
+library(responsesR)
 ```
 
 
@@ -51,41 +51,63 @@ summary(data)
 
 ```{r}
 if (TRUE) { # if you have data you set this to false
-  source("../../responsesR/R/responses.R") 
+  #source("../../responsesR/R/responses.R") 
   # you should be able to load the library instead of just sourcing it from cloned folder
   #hop this will be fixed soon
-  age <- round(rnorm(n=60,mean=40,sd =10))
-  data_likert_4<- genLikert(size = 60,items = 1, levels=4, location=c(-1))
-  data_likert_5<- genLikert(size = 60,items = 3, levels=5, location=c(-1,-1),correlation = 0.5)
-  data_likert_11<- genLikert(size = 60,items = 1, levels=11, location=c(1))
+  n <- 60
+  age <- round(rnorm(n=n,mean=45,sd =8))
+  data_likert_4 <- get_responses(n = n, #number of observations
+                K = 4, #numbers of response categories, a vector or a number
+                mu = -0.5, #means of latent variables, a vector or a number
+                gamma1 = 0.7, #marginal skewness of latent variables, a vector or a number. The values must be between -0.95 and 0.95.
+                sd = 0.9,#,#standard deviations of latent variables, a vector or a number
+                R=0 # correlations between latent variables
+  )
+  data_likert_5 <- get_responses(n = n, #number of observations
+                K = 5, #numbers of response categories, a vector or a number
+                mu = 0, #means of latent variables, a vector or a number
+                gamma1 = -0.1, #marginal skewness of latent variables, a vector or a number. The values must be between -0.95 and 0.95.
+                sd = 1,#,#standard deviations of latent variables, a vector or a number
+                R=0 # correlations between latent variables
+  ) 
+  #<- genLikert(size = 60,items = 3, levels=5, location=c(-1,-1),correlation = 0.5)
+  data_likert_11 <- get_responses(n = n, #number of observations
+                K = 11, #numbers of response categories, a vector or a number
+                mu = 1, #means of latent variables, a vector or a number
+                gamma1 = -0.1, #marginal skewness of latent variables, a vector or a number. The values must be between -0.95 and 0.95.
+                sd = 1,#,#standard deviations of latent variables, a vector or a number
+                R=0 # correlations between latent variables
+  ) 
+  
+  #<- genLikert(size = 60,items = 1, levels=11, location=c(1))
   ferritin <- rlnorm(n=60,meanlog = 3,sdlog = 1)
   data <- data %>% mutate(
     Kys1Age   = age ,    
     Kys2Gender       = case_when(
-      data_likert_4$X == 1 ~ "Women",
-      data_likert_4$X == 2 ~ "Men",
-      data_likert_4$X == 3 ~ "Non-binary/other",
-      data_likert_4$X == 4 ~ "Don't wish to respond"),
+      data_likert_4 == 1 ~ "Women",
+      data_likert_4 == 2 ~ "Men",
+      data_likert_4 == 3 ~ "Non-binary/other",
+      data_likert_4 == 4 ~ "Don't wish to respond"),
       
     Kys3DonationCount =  case_when(
-      data_likert_11$X ==    1 ~ "None",
-      data_likert_11$X ==  2 ~"1-10",
-      data_likert_11$X ==3 ~ "11-20",
-      data_likert_11$X ==4 ~ "21-30",
-      data_likert_11$X ==5 ~ "31-40",
-      data_likert_11$X ==6 ~ "51-60",
-      data_likert_11$X ==7 ~ "61-70",
-      data_likert_11$X ==8 ~ "71-80",
-      data_likert_11$X ==9 ~ "81-90",
-      data_likert_11$X ==10 ~ "91-100",
-      data_likert_11$X == 11 ~ "Over 100"
+      data_likert_11 ==    1 ~ "None",
+      data_likert_11 ==  2 ~"1-10",
+      data_likert_11 ==3 ~ "11-20",
+      data_likert_11 ==4 ~ "21-30",
+      data_likert_11 ==5 ~ "31-40",
+      data_likert_11 ==6 ~ "51-60",
+      data_likert_11 ==7 ~ "61-70",
+      data_likert_11 ==8 ~ "71-80",
+      data_likert_11 ==9 ~ "81-90",
+      data_likert_11 ==10 ~ "91-100",
+      data_likert_11 == 11 ~ "Over 100"
       
     ),
-    Kys4YearStarted   = 2024 - age - round(rnorm(n=60,mean = 10, sd = 5 )),
-    Kys5         =   data_likert_5$X1,
-    Kys6         = data_likert_5$X2,
+    Kys4YearStarted   = 2024 - age + round(rnorm(n=60,mean = 5, sd = 3 )),
+    Kys5         =   data_likert_5,
+    Kys6         = data_likert_5,
     Kys20aLabResults  = ferritin,
-    Kys21  =   data_likert_5$X3,
+    Kys21  =   data_likert_5,
   )
   
   summary(data)
