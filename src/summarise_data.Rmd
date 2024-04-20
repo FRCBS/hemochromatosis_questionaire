@@ -214,3 +214,33 @@ add all the questions here
 # Distributions of lab values
 
 add here like age
+
+```{r}
+
+p <- ggplot(data)
+p <- p +  geom_histogram(aes(x=Kys20aLabResults),binwidth = 5)
+p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p + xlab("Age in years")
+p
+
+```   
+```{r}
+
+p <- ggplot(data)
+p <- p +  geom_histogram(aes(x=Kys20aLabResults),binwidth = 10)
+p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p + xlab("Age in years")
+p
+
+```
+#Miten tuo Age in years on noin, naisvastaajissa 150 ja 200+ ? Iät 23-64v? Tai mitä pitäisi laittaa x-akselille?
+
+```{r}
+
+p <- ggplot(data)
+p <- p +  geom_histogram(aes(x=Kys20aLabResults),binwidth = 5)
+p <- p + facet_wrap(. ~ Kys2Gender)
+p
+
+```   
+#Missä kohtaa pitäisi tehdä rename, jos haluaisi Kys20aLabResults muuttaa eri nimeksi?
