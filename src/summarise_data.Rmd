@@ -75,11 +75,23 @@ tmp <-  data %>%
     ),
     Kys10Worry = factor(
       Kys10Worry,
-      ordered = TRUE#,
-   #   levels = 1:5,
-    #  labels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")
-    ),
-    Kys20bFerrit = as.numeric(Kys20bFerrit),
+      ordered = TRUE,
+      #First you specify the levels in the original data , in the order that you want them to be
+      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      #Then you specify new names for them
+      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+# > tmp$Kys10Worry
+#  [1] Totally disagree Partly disagree  Partly agree     Partly agree     Partly disagree  Partly agree     Totally disagree Partly disagree 
+#  [9] Partly agree     Partly agree     Partly agree     Totally agree    Totally disagree Totally agree    Partly disagree  Totally disagree
+# [17] Partly disagree  Partly agree     Totally agree    Partly agree     Partly disagree  Partly agree     Partly disagree  Partly agree    
+# [25] Partly disagree  Partly agree     Partly agree     Partly disagree  Totally disagree Partly disagree 
+# Levels: Totally agree < Partly agree < Neutral < Partly disagree < Totally disagree
+#> table(tmp$Kys10Worry)
+# 
+# Totally agree     Partly agree          Neutral  Partly disagree Totally disagree 
+# 3               12                0               10                5
+     ),
+Kys20bFerrit = as.numeric(Kys20bFerrit),
    Kys20cTrfesat = as.numeric(Kys20cTrfesat),
    Kys20dHemoglobin = as.numeric(Kys20dHemoglobin),
    Kys20eMCV = as.numeric(Kys20eMCV),
