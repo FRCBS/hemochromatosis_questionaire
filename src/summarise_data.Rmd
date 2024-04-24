@@ -81,10 +81,7 @@ tmp <-  data %>%
       #Then you specify new names for them
       labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
 # > tmp$Kys10Worry
-#  [1] Totally disagree Partly disagree  Partly agree     Partly agree     Partly disagree  Partly agree     Totally disagree Partly disagree 
-#  [9] Partly agree     Partly agree     Partly agree     Totally agree    Totally disagree Totally agree    Partly disagree  Totally disagree
-# [17] Partly disagree  Partly agree     Totally agree    Partly agree     Partly disagree  Partly agree     Partly disagree  Partly agree    
-# [25] Partly disagree  Partly agree     Partly agree     Partly disagree  Totally disagree Partly disagree 
+#...
 # Levels: Totally agree < Partly agree < Neutral < Partly disagree < Totally disagree
 #> table(tmp$Kys10Worry)
 # 
