@@ -252,5 +252,6 @@ p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Lab Results")
 p
 
+
 ```   
 #Tässä kohtaa näkyy myös "Do not wish to respond", mutta Knitin jälkeen ei näy?
