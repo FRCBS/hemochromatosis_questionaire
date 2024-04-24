@@ -36,107 +36,56 @@ library(responsesR)
 
 ```{r}
 file <- here("data/Tulokset - hemokromatoosikysely vastaukset (ID 133620).xlsx")
-data <- read_xlsx(file,n_max = 60)
-if (TRUE) { # But if this is fixed in xlsx you don't need to do this
-  summary(data)
-  data <- data %>% rename(
-    Kys2Gender = K2Gender
+data <- read_xlsx(file)
+
+colnames(data)
+```
+
+```{r}
+data<- data %>% 
+  select(
+    -Kys8aFutureOpen,
+    -Kys12aTrustOpen,
+    -Kys13aMembertoBiobankOpen,
+    -Kys15Where,#pitää jakaa eri sarakkeisiin
+    -Kys15OtherWhere,
+    -Kys21OtherResultsOpen,
+    -Kys23SymptomsOpen,
+    -Kys26cAttitudesinFamilyOpen
+    
   )
-}
 summary(data)
 ```
 
-
-## Simulate
-
-```{r}
-if (TRUE) { # if you have data you set this to false
-  #source("../../responsesR/R/responses.R") 
-  # you should be able to load the library instead of just sourcing it from cloned folder
-  #hop this will be fixed soon
-  n <- 60
-  age <- round(rnorm(n=n,mean=45,sd =8))
-  data_likert_4 <- get_responses(n = n, #number of observations
-                K = 4, #numbers of response categories, a vector or a number
-                mu = -0.5, #means of latent variables, a vector or a number
-                gamma1 = 0.7, #marginal skewness of latent variables, a vector or a number. The values must be between -0.95 and 0.95.
-                sd = 0.9,#,#standard deviations of latent variables, a vector or a number
-                R=0 # correlations between latent variables
-  )
-  data_likert_5 <- get_responses(n = n, #number of observations
-                K = 5, #numbers of response categories, a vector or a number
-                mu = 0, #means of latent variables, a vector or a number
-                gamma1 = -0.1, #marginal skewness of latent variables, a vector or a number. The values must be between -0.95 and 0.95.
-                sd = 1,#,#standard deviations of latent variables, a vector or a number
-                R=0 # correlations between latent variables
-  ) 
-  #<- genLikert(size = 60,items = 3, levels=5, location=c(-1,-1),correlation = 0.5)
-  data_likert_11 <- get_responses(n = n, #number of observations
-                K = 11, #numbers of response categories, a vector or a number
-                mu = 1, #means of latent variables, a vector or a number
-                gamma1 = -0.1, #marginal skewness of latent variables, a vector or a number. The values must be between -0.95 and 0.95.
-                sd = 1,#,#standard deviations of latent variables, a vector or a number
-                R=0 # correlations between latent variables
-  ) 
-  
-  #<- genLikert(size = 60,items = 1, levels=11, location=c(1))
-  ferritin <- rlnorm(n=60,meanlog = 3,sdlog = 1)
-  data <- data %>% mutate(
-    Kys1Age   = age ,    
-    Kys2Gender       = case_when(
-      data_likert_4 == 1 ~ "Women",
-      data_likert_4 == 2 ~ "Men",
-      data_likert_4 == 3 ~ "Non-binary/other",
-      data_likert_4 == 4 ~ "Don't wish to respond"),
-      
-    Kys3DonationCount =  case_when(
-      data_likert_11 ==    1 ~ "None",
-      data_likert_11 ==  2 ~"1-10",
-      data_likert_11 ==3 ~ "11-20",
-      data_likert_11 ==4 ~ "21-30",
-      data_likert_11 ==5 ~ "31-40",
-      data_likert_11 ==6 ~ "51-60",
-      data_likert_11 ==7 ~ "61-70",
-      data_likert_11 ==8 ~ "71-80",
-      data_likert_11 ==9 ~ "81-90",
-      data_likert_11 ==10 ~ "91-100",
-      data_likert_11 == 11 ~ "Over 100"
-      
-    ),
-    Kys4YearStarted   = 2024 - age + round(rnorm(n=60,mean = 5, sd = 3 )),
-    Kys5         =   data_likert_5,
-    Kys6         = data_likert_5,
-    Kys20aLabResults  = ferritin,
-    Kys21  =   data_likert_5,
-  )
-  
-  summary(data)
-}
-```
+ 
 
 ## Process
 
 ```{r}
 
-data <-  data %>% 
+tmp <-  data %>% 
   mutate(
     Kys2Gender = factor(Kys2Gender),
     Kys3DonationCount = factor(Kys3DonationCount,ordered = TRUE),
-    Kys5 = factor(
-      Kys5,
+    Kys9Useful = factor(
+      Kys9Useful,
       ordered = TRUE,
       levels = 1:5,
-      labels =  c("Totally agree","Agree","Neutral","Disagree","Totally disagree")
+      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
     ),
-    Kys6 = factor(
-      Kys6,
-      ordered = TRUE,
-      levels = 1:5,
-      labels = c("Totally agree","Agree","Neutral","Disagree","Totally disagree")
+    Kys10Worry = factor(
+      Kys10Worry,
+      ordered = TRUE#,
+   #   levels = 1:5,
+    #  labels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")
     ),
-    Kys21 = factor(Kys5,ordered = TRUE)
+    Kys20bFerrit = as.numeric(Kys20bFerrit),
+   Kys20cTrfesat = as.numeric(Kys20cTrfesat),
+   Kys20dHemoglobin = as.numeric(Kys20dHemoglobin),
+   Kys20eMCV = as.numeric(Kys20eMCV),
+   Kys20fALAT = as.numeric(Kys20fALAT)
   )
-summary(data)
+summary(tmp)
 ```
 
 
@@ -233,7 +182,9 @@ p <- p + xlab("Age in years")
 p
 
 ```
-#Miten tuo Age in years on noin, naisvastaajissa 150 ja 200+ ? Iät 23-64v? Tai mitä pitäisi laittaa x-akselille? Seuraava yritys alla:
+
+Miten tuo Age in years on noin, naisvastaajissa 150 ja 200+ ? Iät 23-64v? Tai mitä pitäisi laittaa x-akselille? Seuraava yritys alla:
+
 
 ```{r}
 
@@ -243,7 +194,9 @@ p <- p + facet_wrap(. ~ Kys2Gender)
 p
 
 ```   
-#Missä kohtaa pitäisi tehdä rename, jos haluaisi Kys20aLabResults muuttaa eri nimeksi? Ei tehdäkään renamella? Seuraava kokeilu:
+
+Missä kohtaa pitäisi tehdä rename, jos haluaisi Kys20aLabResults muuttaa eri nimeksi? Ei tehdäkään renamella? Seuraava kokeilu:
+
 ```{r}
 
 p <- ggplot(data)
@@ -254,4 +207,5 @@ p
 
 
 ```   
-#Tässä kohtaa näkyy myös "Do not wish to respond", mutta Knitin jälkeen ei näy?
+
+Tässä kohtaa näkyy myös "Do not wish to respond", mutta Knitin jälkeen ei näy?
