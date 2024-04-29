@@ -89,6 +89,7 @@ tmp <-  data %>%
 # 3               12                0               10                5
      ),
 
+
     Kys11HealthPromotion = factor(
       Kys11HealthPromotion,
       ordered = TRUE,
@@ -133,25 +134,25 @@ Kys25Motivation = factor(
 
 Kys5HowOften = factor(
   Kys5HowOften,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason, eg. Age or other barrier", "Can not tell")
   ),
 
 Kys6EasytoUnderstand = factor(
   Kys6EasytoUnderstand,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No", "Can not tell")
   ),
 
 Kys7Understanding = factor(
   Kys7Understanding,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No")
 ),
 
 Kys8Future = factor(
   Kys8Future,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No")
 ),
 
@@ -169,7 +170,7 @@ Kys13MembertoBiobank = factor(
 
 Kys14Healthcare = factor(
   Kys14Healthcare,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No")
 ),
 
@@ -181,31 +182,31 @@ Kys19Attitude = factor(
 
 Kys22Diagnosis = factor(
   Kys22Diagnosis,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No", "Don't know")
 ),
 
 Kys23aTiredness = factor(
   Kys23aTiredness,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No")
 ),
 
 Kys23bJoint = factor(
   Kys23bJoint,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No")
 ),
 
 Kys23cType2DM = factor(
   Kys23cType2DM,
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No")
 ),
 
 Kys26aFamily = factor(
   Kys26aFamily,#tarkista maksimi
-  ordered = TRUE,
+  ordered = FALSE,
   levels = c("Yes", "No")
 ),
 
@@ -213,12 +214,18 @@ Kys26aFamily = factor(
 Kys1Age	= as.numeric(Kys1Age),
 Kys4YearStarted = as.numeric(Kys4YearStarted),
 Kys20bFerrit = as.numeric(Kys20bFerrit),
-   Kys20cTrfesat = as.numeric(Kys20cTrfesat),
-   Kys20dHemoglobin = as.numeric(Kys20dHemoglobin),
-   Kys20eMCV = as.numeric(Kys20eMCV),
-   Kys20fALAT = as.numeric(Kys20fALAT),
+Kys20cTrfesat = as.numeric(Kys20cTrfesat),
+Kys20dHemoglobin = as.numeric(Kys20dHemoglobin),
+Kys20eMCV = as.numeric(Kys20eMCV),
+Kys20fALAT = as.numeric(Kys20fALAT),
 Kys26bNumberofRelatives = as.numeric(Kys26bNumberofRelatives)
   )
+
+factor(data$`Kys20aB-HFE-D`)
+
+table(factor(data$`Kys20aB-HFE-D`))
+
+
 summary(tmp)
 ```
 
