@@ -42,12 +42,12 @@ colnames(data)
 ```
 
 ```{r}
+#remove open questions
 data<- data %>% 
   select(
     -Kys8aFutureOpen,
     -Kys12aTrustOpen,
     -Kys13aMembertoBiobankOpen,
-    -Kys15Where,#pitää jakaa eri sarakkeisiin
     -Kys15OtherWhere,
     -Kys21OtherResultsOpen,
     -Kys23SymptomsOpen,
@@ -64,6 +64,7 @@ summary(data)
 ```{r}
 
 tmp <-  data %>% 
+  rename(Kys20aBHFED = `Kys20aB-HFE-D`) %>% 
   mutate(
     Kys2Gender = factor(Kys2Gender),
     Kys3DonationCount = factor(Kys3DonationCount,ordered = TRUE),
@@ -79,146 +80,184 @@ tmp <-  data %>%
       #First you specify the levels in the original data , in the order that you want them to be
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
       #Then you specify new names for them
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
-# > tmp$Kys10Worry
-#...
-# Levels: Totally agree < Partly agree < Neutral < Partly disagree < Totally disagree
-#> table(tmp$Kys10Worry)
-# 
-# Totally agree     Partly agree          Neutral  Partly disagree Totally disagree 
-# 3               12                0               10                5
-     ),
-
-
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      # > tmp$Kys10Worry
+      #...
+      # Levels: Totally agree < Partly agree < Neutral < Partly disagree < Totally disagree
+      #> table(tmp$Kys10Worry)
+      # 
+      # Totally agree     Partly agree          Neutral  Partly disagree Totally disagree 
+      # 3               12                0               10                5
+    ),
+    
+    
     Kys11HealthPromotion = factor(
       Kys11HealthPromotion,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
       labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
     ),
-
-Kys16Flexibility = factor(
+    
+    Kys16Flexibility = factor(
       Kys16Flexibility,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
       labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
     ),
-
-Kys17Support = factor(
+    
+    Kys17Support = factor(
       Kys17Support,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
       labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
     ),
-
-Kys18Answers = factor(
+    
+    Kys18Answers = factor(
       Kys18Answers,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
       labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
     ),
-
-Kys24Influence = factor(
+    
+    Kys24Influence = factor(
       Kys24Influence,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
       labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
     ),
-
-Kys25Motivation = factor(
+    
+    Kys25Motivation = factor(
       Kys25Motivation,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
       labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
     ),
-
-Kys5HowOften = factor(
-  Kys5HowOften,
-  ordered = FALSE,
-  levels = c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason, eg. Age or other barrier", "Can not tell")
-  ),
-
-Kys6EasytoUnderstand = factor(
-  Kys6EasytoUnderstand,
-  ordered = FALSE,
-  levels = c("Yes", "No", "Can not tell")
-  ),
-
-Kys7Understanding = factor(
-  Kys7Understanding,
-  ordered = FALSE,
-  levels = c("Yes", "No")
-),
-
-Kys8Future = factor(
-  Kys8Future,
-  ordered = FALSE,
-  levels = c("Yes", "No")
-),
-
-Kys12Trust = factor(
-  Kys12Trust,
-  ordered = TRUE,
-  levels = c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")
-),
-
-Kys13MembertoBiobank = factor(
-  Kys13MembertoBiobank,
-  ordered = TRUE,
-  levels = c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")
-),
-
-Kys14Healthcare = factor(
-  Kys14Healthcare,
-  ordered = FALSE,
-  levels = c("Yes", "No")
-),
-
-Kys19Attitude = factor(
-  Kys19Attitude,
-  ordered = TRUE,
-  levels = c("Positive", "Partly positive", "Neutral", "Partly negative", "Negative")
-),
-
-Kys22Diagnosis = factor(
-  Kys22Diagnosis,
-  ordered = FALSE,
-  levels = c("Yes", "No", "Don't know")
-),
-
-Kys23aTiredness = factor(
-  Kys23aTiredness,
-  ordered = FALSE,
-  levels = c("Yes", "No")
-),
-
-Kys23bJoint = factor(
-  Kys23bJoint,
-  ordered = FALSE,
-  levels = c("Yes", "No")
-),
-
-Kys23cType2DM = factor(
-  Kys23cType2DM,
-  ordered = FALSE,
-  levels = c("Yes", "No")
-),
-
-Kys26aFamily = factor(
-  Kys26aFamily,#tarkista maksimi
-  ordered = FALSE,
-  levels = c("Yes", "No")
-),
-
-
-Kys1Age	= as.numeric(Kys1Age),
-Kys4YearStarted = as.numeric(Kys4YearStarted),
-Kys20bFerrit = as.numeric(Kys20bFerrit),
-Kys20cTrfesat = as.numeric(Kys20cTrfesat),
-Kys20dHemoglobin = as.numeric(Kys20dHemoglobin),
-Kys20eMCV = as.numeric(Kys20eMCV),
-Kys20fALAT = as.numeric(Kys20fALAT),
-Kys26bNumberofRelatives = as.numeric(Kys26bNumberofRelatives)
+    
+    Kys5HowOften = factor(
+      Kys5HowOften,
+      ordered = FALSE,
+      levels = c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason, eg. Age or other barrier", "Can not tell")
+    ),
+    
+    Kys6EasytoUnderstand = factor(
+      Kys6EasytoUnderstand,
+      ordered = TRUE,
+      levels = c("No", "Can not tell", "Yes")
+    ),
+    
+    Kys7Understanding = factor(
+      Kys7Understanding,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys8Future = factor(
+      Kys8Future,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys12Trust = factor(
+      Kys12Trust,
+      ordered = TRUE,
+      levels = c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")
+    ),
+    
+    Kys13MembertoBiobank = factor(
+      Kys13MembertoBiobank,
+      ordered = TRUE,
+      levels = c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")
+    ),
+    
+    Kys14Healthcare = factor(
+      Kys14Healthcare,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys15aStudentHealth = factor(
+      Kys15aStudentHealth,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys15bOccupational = factor(
+      Kys15bOccupational,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys15cSpecialHealth = factor(
+      Kys15cSpecialHealth,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys15dHealthCare = factor(
+      Kys15dHealthCare,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys15ePrivate = factor(
+      Kys15ePrivate,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    
+    Kys19Attitude = factor(
+      Kys19Attitude,
+      ordered = TRUE,
+      levels = c("Positive", "Partly positive", "Neutral", "Partly negative", "Negative")
+    ),
+    
+    Kys22Diagnosis = factor(
+      Kys22Diagnosis,
+      ordered = FALSE,
+      levels = c("Yes", "No", "Don't know")
+    ),
+    
+    Kys23aTiredness = factor(
+      Kys23aTiredness,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys23bJoint = factor(
+      Kys23bJoint,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys23cType2DM = factor(
+      Kys23cType2DM,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys26aFamily = factor(
+      Kys26aFamily,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    
+    
+    
+    Kys1Age	= as.numeric(Kys1Age),
+    Kys4YearStarted = as.numeric(Kys4YearStarted),
+    Kys20aBHFED = factor(
+    Kys20aBHFED,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    Kys20bFerrit = as.numeric(Kys20bFerrit),
+    Kys20cTrfesat = as.numeric(Kys20cTrfesat),
+    Kys20dHemoglobin = as.numeric(Kys20dHemoglobin),
+    Kys20eMCV = as.numeric(Kys20eMCV),
+    Kys20fALAT = as.numeric(Kys20fALAT),
+    Kys26bNumberofRelatives = as.numeric(Kys26bNumberofRelatives)
   )
 
 factor(data$`Kys20aB-HFE-D`)
@@ -269,9 +308,6 @@ table1 <-
 table1
 ```
 
-
-
-
 # Distributions of Likert scale questions
 
 
@@ -301,7 +337,7 @@ plot(q01,
 add all the questions here
 
 
-# Distributions of lab values
+# Distributions of lab values by gender
 
 add here like age
 
