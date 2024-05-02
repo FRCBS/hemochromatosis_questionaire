@@ -63,7 +63,7 @@ summary(data)
 
 ```{r}
 
-tmp <-  data %>% 
+data <-  data %>% 
   rename(Kys20aBHFED = `Kys20aB-HFE-D`) %>% 
   mutate(
     Kys2Gender = factor(Kys2Gender),
@@ -71,14 +71,14 @@ tmp <-  data %>%
     Kys9Useful = factor(
       Kys9Useful,
       ordered = TRUE,
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     Kys10Worry = factor(
       Kys10Worry,
       ordered = TRUE,
       #First you specify the levels in the original data , in the order that you want them to be
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       #Then you specify new names for them
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
       # > tmp$Kys10Worry
@@ -94,42 +94,42 @@ tmp <-  data %>%
     Kys11HealthPromotion = factor(
       Kys11HealthPromotion,
       ordered = TRUE,
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys16Flexibility = factor(
       Kys16Flexibility,
       ordered = TRUE,
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys17Support = factor(
       Kys17Support,
       ordered = TRUE,
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys18Answers = factor(
       Kys18Answers,
       ordered = TRUE,
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys24Influence = factor(
       Kys24Influence,
       ordered = TRUE,
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys25Motivation = factor(
       Kys25Motivation,
       ordered = TRUE,
-      levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
+      levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
@@ -257,12 +257,7 @@ tmp <-  data %>%
     Kys26bNumberofRelatives = as.numeric(Kys26bNumberofRelatives)
   )
 
-factor(data$`Kys20aB-HFE-D`)
-
-table(factor(data$`Kys20aB-HFE-D`))
-
-
-summary(tmp)
+summary(data)
 ```
 
 
@@ -310,14 +305,14 @@ table1
 
 ```{r} 
 items = data %>% 
-  select(Kys23aTiredness, Kys23bJoint)
-  
+  select(Kys9Useful, Kys10Worry, Kys11HealthPromotion) %>% as.data.frame()
+colnames(items) <- c(
+  "Geenitiedon vastaanottaminen on hyödyllistä",
+  "Geenitiedon vastaanottaminen ei herättänyt minussa huolta",
+  "Biopankin geenitietoa pitäisi hyödyntää laajemmin terveyden edistämiseksi"
+)
 
-#colnames(items) <- c("It was useful to receive genetic information","Receiving genetic information did not make me worry")
-
-#nlevels = rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
-
-nlevels = c("Yes", "No")
+nlevels = 5
 ```
 
 
@@ -328,7 +323,8 @@ q09 <- likert(
   
 )
 plot(q09, 
-     type = "heat",
+     type = "bar",
+     wrap = 10,
      legend.position = "bottom",
      text.size=3,
      include.histogram = FALSE)
@@ -345,36 +341,14 @@ add here like age
 ```{r}
 
 p <- ggplot(data)
-p <- p +  geom_histogram(aes(x=Kys20bFerrit),binwidth = 5)
-p <- p + facet_wrap(. ~ Kys2Gender)#mihin kohtaan ja miten sukupuoli
-p <- p + xlab("Age in years")
-p
-
-```   
-
-
-
-
-```{r}
-
-p <- ggplot(data)
-p <- p +  geom_histogram(aes(x=Kys20aLabResults),binwidth = 5)
+p <- p + geom_histogram(aes(x=Kys20bFerrit, fill = Kys2Gender), binwidth = 0.2)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p
-
-```   
-
-Missä kohtaa pitäisi tehdä rename, jos haluaisi Kys20aLabResults muuttaa eri nimeksi? Ei tehdäkään renamella? Seuraava kokeilu:
-
-```{r}
-
-p <- ggplot(data)
-p <- p +  geom_histogram(aes(x=Kys20aLabResults),binwidth = 5)
-p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Lab Results")
+p <- p + xlab("Ferritin results")
+p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 500, col = "red"))
 p
 
 
 ```   
 
-Tässä kohtaa näkyy myös "Do not wish to respond", mutta Knitin jälkeen ei näy?
+
+
