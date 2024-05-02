@@ -72,7 +72,7 @@ tmp <-  data %>%
       Kys9Useful,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     Kys10Worry = factor(
       Kys10Worry,
@@ -95,42 +95,42 @@ tmp <-  data %>%
       Kys11HealthPromotion,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys16Flexibility = factor(
       Kys16Flexibility,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys17Support = factor(
       Kys17Support,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys18Answers = factor(
       Kys18Answers,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys24Influence = factor(
       Kys24Influence,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys25Motivation = factor(
       Kys25Motivation,
       ordered = TRUE,
       levels = c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree"),
-      labels =  c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree")
+      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
     ),
     
     Kys5HowOften = factor(
@@ -160,13 +160,13 @@ tmp <-  data %>%
     Kys12Trust = factor(
       Kys12Trust,
       ordered = TRUE,
-      levels = c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")
+      levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased"))
     ),
     
     Kys13MembertoBiobank = factor(
       Kys13MembertoBiobank,
       ordered = TRUE,
-      levels = c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")
+      levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased"))
     ),
     
     Kys14Healthcare = factor(
@@ -209,7 +209,7 @@ tmp <-  data %>%
     Kys19Attitude = factor(
       Kys19Attitude,
       ordered = TRUE,
-      levels = c("Positive", "Partly positive", "Neutral", "Partly negative", "Negative")
+      levels = rev(c("Positive", "Partly positive", "Neutral", "Partly negative", "Negative"))
     ),
     
     Kys22Diagnosis = factor(
@@ -241,9 +241,6 @@ tmp <-  data %>%
       ordered = FALSE,
       levels = c("Yes", "No")
     ),
-    
-    
-    
     
     Kys1Age	= as.numeric(Kys1Age),
     Kys4YearStarted = as.numeric(Kys4YearStarted),
@@ -311,23 +308,26 @@ table1
 # Distributions of Likert scale questions
 
 
-```{r , warning=FALSE}
+```{r} 
 items = data %>% 
-    select(Kys5,Kys6) 
+  select(Kys23aTiredness, Kys23bJoint)
+  
 
-colnames(items) <- c("It was useful to receive genetic information","Receiving genetic information did not make me worry")
+#colnames(items) <- c("It was useful to receive genetic information","Receiving genetic information did not make me worry")
 
-nlevels = 5
+#nlevels = rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+
+nlevels = c("Yes", "No")
 ```
 
 
-```{r , warning=FALSE}
-q01 <- likert(
+```{r}
+q09 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
   
 )
-plot(q01, 
+plot(q09, 
      type = "heat",
      legend.position = "bottom",
      text.size=3,
@@ -341,26 +341,18 @@ add all the questions here
 
 add here like age
 
+
 ```{r}
 
 p <- ggplot(data)
-p <- p +  geom_histogram(aes(x=Kys20aLabResults),binwidth = 5)
-p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p +  geom_histogram(aes(x=Kys20bFerrit),binwidth = 5)
+p <- p + facet_wrap(. ~ Kys2Gender)#mihin kohtaan ja miten sukupuoli
 p <- p + xlab("Age in years")
 p
 
 ```   
-```{r}
 
-p <- ggplot(data)
-p <- p +  geom_histogram(aes(x=Kys20aLabResults),binwidth = 10)
-p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Age in years")
-p
 
-```
-
-Miten tuo Age in years on noin, naisvastaajissa 150 ja 200+ ? Iät 23-64v? Tai mitä pitäisi laittaa x-akselille? Seuraava yritys alla:
 
 
 ```{r}
