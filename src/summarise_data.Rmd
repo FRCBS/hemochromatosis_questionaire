@@ -136,7 +136,7 @@ data <-  data %>%
     Kys5HowOften = factor(
       Kys5HowOften,
       ordered = FALSE,
-      levels = c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason, eg. Age or other barrier", "Can not tell")
+      levels = rev(c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason, eg. Age or other barrier", "Can not tell"))
     ),
     
     Kys6EasytoUnderstand = factor(
@@ -329,7 +329,134 @@ plot(q09,
      text.size=3,
      include.histogram = FALSE)
 ```
+```{r} 
+items = data %>% 
+  select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
+colnames(items) <- c(
+  "Miten geenitiedon vastaanottaminen on vaikuttanut luottamukseesi Veripalvelua kohtaan?",
+  "Miten geenitiedon vastaanottaminen on vaikuttanut haluusi kuulua Veripalvelun Biopankkiin?"
+)
 
+nlevels = 5
+```
+
+
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     text.size=3,
+     include.histogram = FALSE)
+```
+```{r} 
+items = data %>% 
+  select(Kys16Flexibility, Kys17Support, Kys18Answers) %>% as.data.frame()
+colnames(items) <- c(
+  "Terveydenhuollossa asiaani vietiin sujuvasti eteenpäin",
+  "Sain terveydenhuollossa riittävästi tukea asiaan",
+  "Terveydenhuollossa kysymyksiini osattiin vastata"
+)
+
+nlevels = 5
+```
+
+
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     text.size=3,
+     include.histogram = FALSE)
+```
+```{r} 
+items = data %>% 
+  select(Kys19Attitude) %>% as.data.frame()
+colnames(items) <- c(
+  "Terveydenhuollossa geenitiedon palauttamiseen biopankista suhtauduttiin..."
+)
+
+nlevels = 5
+```
+
+
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     text.size=3,
+     include.histogram = FALSE)
+```
+```{r} 
+items = data %>% 
+  select(Kys24Influence, Kys25Motivation) %>% as.data.frame()
+colnames(items) <- c(
+  "Uskon, että pystyn vaikuttamaan hemokromatoosiriskiini elintavoillani",
+  "Riskitiedon saaminen motivoi minua huolehtimaan terveydestäni paremmin"
+)
+
+#Miten kys 23 oireista?
+
+nlevels = 5
+```
+
+
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     text.size=3,
+     include.histogram = FALSE)
+```
+```{r} 
+items = data %>% 
+  select(Kys5HowOften) %>% as.data.frame()
+colnames(items) <- c(
+  "Miten aiot jatkaa verenluovutusta vastaanotettuasi tiedon raudankertymäalttiudesta?"
+)
+
+nlevels = 6
+```
+
+
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 10,
+     legend.position = "bottom",
+     text.size=3,
+     include.histogram = FALSE)
+
+#värit tässä, yksi vaihtoehto valkoinen, mitäs jos olisi vastauksia?
+```
 add all the questions here
 
 
@@ -343,12 +470,64 @@ add here like age
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20bFerrit, fill = Kys2Gender), binwidth = 0.2)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Ferritin results")
-p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 500, col = "red"))
+p <- p + xlab("Ferritin µg/l")
+p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
 p
 
 
 ```   
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_histogram(aes(x=Kys20cTrfesat, fill = Kys2Gender), binwidth = 0.2)
+p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p + xlab("Transferrin saturation %")
+#p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
+p
 
 
+```  
+# Disributions of Yes/No questions
 
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_bar(aes(x=Kys6EasytoUnderstand))
+p <- p + xlab("Minulle palautettu geenitieto oli helppo ymmärtää")
+p
+
+#Tässä oli vastausvaihtoehtona Kyllä/Ei/EOS
+
+#Saisiko myös näitä Kyllä/Ei kysymyksiä samaan taulukkoon/jotenkin vieretysten, jos aihepiiri suht sama? esim kys 6 (Kyllä, Ei, EOS) 7,8 (Kyllä/Ei)
+```
+
+
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_bar(aes(x=Kys14Healthcare))
+p <- p + xlab("Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?")
+p
+
+#Miten kysymys 15, saisiko samaan? Minne hakeuduttu
+```
+
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_bar(aes(x=Kys22Diagnosis))
+p <- p + xlab("Asetettiinko sinulle kliininen hemokromatoosidiagnoosi (ICD10: E83.1)?")
+p
+
+```
+
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_bar(aes(x=Kys26aFamily))
+p <- p + xlab("Olen keskustellut hemokromatoosialttiudestani lähisukulaisteni kanssa")
+p
+
+#Miten kysymys 26b
+
+```
