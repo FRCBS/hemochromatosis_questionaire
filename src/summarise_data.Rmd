@@ -313,7 +313,7 @@ p
 items = data %>% 
   select(Kys5HowOften) %>% as.data.frame()
 colnames(items) <- c(
-  "After receiving genetic information about hemocromatosis, how are you planning to continue to donate?"
+  "After receiving genetic information about hemochromatosis, how are you planning to continue to donate?"
 )
 
 nlevels = 6
@@ -327,7 +327,7 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 10,
+     wrap = 25,
      #legend.position = c(0.3, 0.7),
      legend.position = c("bottom"),
      legend = element_blank(),
@@ -389,7 +389,7 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 10,
+     wrap = 20,
      #legend.position = c(0.3, 0.7),
      legend.position = c("bottom"),
      legend = element_blank(),
@@ -417,7 +417,7 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 15,
+     wrap = 27,
      legend.position = "left",
      legend = element_blank(),
      text.size=2,
@@ -478,7 +478,7 @@ plot(q09,
      wrap = 15,
      legend.position = "bottom",
      legend = element_blank(),
-     text.size=2,
+     text.size=2.5,
      include.histogram = FALSE)
 ```
 ```{r} 
@@ -566,10 +566,10 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 10,
+     wrap = 30,
      legend.position = "bottom",
      legend = element_blank(),
-     text.size=3,
+     text.size=2.5,
      include.histogram = FALSE)
 
 ```
@@ -612,8 +612,6 @@ p <- p + xlab("Ferritin µg/l")
 #p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
 p
 
-#saisiko naiset skaalattua 0-500 vai onko väliä?
-
 ```   
 
 
@@ -637,7 +635,7 @@ p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Hemoglobin g/l") + xlim(120,180)
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
-#alaraja 100, yläraja 200 huomioitu, miten viiterajat, eri sukupuolittain?
+#alaraja 120, yläraja 180 huomioitu, miten viiterajat, eri sukupuolittain?
 p
 
 
@@ -663,7 +661,7 @@ p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("P-ALAT U/l")
 p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
 
-#tässä eri viiterajat miehet/naiset alle 50 /alle 35
+#tässä eri viiterajat miehet alle 50 / naiset alle 35
 
 p
 
@@ -678,13 +676,14 @@ p <- p + geom_bar(aes(x=Kys6EasytoUnderstand))
 p <- p + xlab("The received genetic information was easy to understand.")
 p
 
+#Toimiiko tämä tässä, kun Kyllä/Ei/EOS vaihtoehdot
 
 ```
 ```{r}
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys7Understanding))
-p <- p + xlab("When you gave your consent for biobank, did you understand it could lead to receiving information relevant to your health?")
+p <- p + xlab("When you gave your consent for biobank,\ndid you understand it could lead to\nreceiving information relevant to your health?")
 p
 
 ```
@@ -692,7 +691,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys8Future))
-p <- p + xlab("Would you like to receive similar information in the future, should it appear?")
+p <- p + xlab("Would you like to receive similar information\nin the future, should it appear?")
 p
 
 ```
@@ -709,7 +708,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys22Diagnosis))
-p <- p + xlab("Did you get a clinical diagnosis for hemochromatosis (ICD10: E83.1)?")
+p <- p + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?")
 p
 
 ```
@@ -718,7 +717,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys26aFamily))
-p <- p + xlab("I have discussed about my predisposition to hemochromatosis with my close relatives.")
+p <- p + xlab("I have discussed about my predisposition\nto hemochromatosis with my close relatives.")
 p
 
 
