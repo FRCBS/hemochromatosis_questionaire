@@ -22,12 +22,20 @@ library(gtsummary)
 library(likert)
 library(readxl)
 library(here)
-#https://github.com/markolalovic/responsesR
-#install.packages("devtools")
-#library(devtools)
-# install_github("markolalovic/responsesR")
 library(responsesR)
+
 ```
+
+
+TODO:
+
+-viimeistele kuvat (värit, raja-arvot, kaikki merkit näkyy)
+
+-kumpi kieli
+
+-dokumentin rakenne, onko kysymykset oikeassa järjestyksessä
+
+-kun nämä valmiina niin kuvailevaa tekstiä, mitä kuvassa nähdään? vastaako oletuksia? onko jotain poikkevaa? onko jotain terveydellistä merkitystä?
 
 
 # Data
@@ -300,6 +308,10 @@ table1 <-
 table1
 ```
 
+
+Taulukko yksi tai kaksi vastausvaihtoehto kysymyksistä
+
+
 # Distributions of Likert scale questions
 
 
@@ -329,6 +341,11 @@ plot(q09,
      text.size=3,
      include.histogram = FALSE)
 ```
+
+
+Jonna siirtää legendiä vasemmalle
+
+
 ```{r} 
 items = data %>% 
   select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
@@ -468,14 +485,32 @@ add here like age
 ```{r}
 
 p <- ggplot(data)
-p <- p + geom_histogram(aes(x=Kys20bFerrit, fill = Kys2Gender), binwidth = 0.2)
-p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p + geom_histogram(aes(x=Kys20bFerrit), binwidth = 10)
+p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
 p <- p + xlab("Ferritin µg/l")
-p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
+#p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
+p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
 p
 
 
 ```   
+
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_density(aes(x=Kys20bFerrit), binwidth = 10)
+p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
+p <- p + xlab("Ferritin µg/l")
+#p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
+p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
+p
+
+
+```   
+
+
+
+
 ```{r}
 
 p <- ggplot(data)
@@ -491,9 +526,9 @@ p
 ```{r}
 
 p <- ggplot(data)
-p <- p + geom_histogram(aes(x=Kys20dHemoglobin, fill = Kys2Gender), binwidth = 5)
+p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Hemoglobin g/l")
+p <- p + xlab("Hemoglobin g/l") + xlim(100,200)
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
 "ks yksi arvo"
 p
@@ -503,10 +538,11 @@ p
 ```{r}
 
 p <- ggplot(data)
-p <- p + geom_histogram(aes(x=Kys20eMCV), binwidth = 10)
+p <- p + geom_histogram(aes(x=Kys20eMCV), binwidth = 2)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("e-MCV fl")
-p <- p + scale_x_log10() + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
+#p <- p + scale_x_log10() + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
+p <- p  + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
 p
 
 #joku mättää,mitä muuttaa että näyttäisi järkevältä? Samat viitevälit miehet&naiset. Excelissä muutama tarkistettava kohta!! Miten merkitään vastauksista
