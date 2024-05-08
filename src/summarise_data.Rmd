@@ -272,17 +272,6 @@ summary(data)
 
 # Demographics
 
-## Age by Gender
-
-```{r}
-
-p <- ggplot(data)
-p <- p +  geom_histogram(aes(x=Kys1Age),binwidth = 5)
-p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Age in years")
-p
-
-```
 
 
 ## Demographics Table 1
@@ -308,8 +297,41 @@ table1 <-
 table1
 ```
 
+## Age by Gender
 
-Taulukko yksi tai kaksi vastausvaihtoehto kysymyksistä
+```{r}
+
+p <- ggplot(data)
+p <- p +  geom_histogram(aes(x=Kys1Age),binwidth = 5)
+p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p + xlab("Age in years")
+p
+
+```
+
+
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     text.size=3,
+     include.histogram = FALSE)
+```
+```{r} 
+items = data %>% 
+  select(Kys5HowOften) %>% as.data.frame()
+colnames(items) <- c(
+  "Miten aiot jatkaa verenluovutusta vastaanotettuasi tiedon raudankertymäalttiudesta?"
+)
+
+nlevels = 6
+```
 
 ```{r}
 
@@ -337,97 +359,8 @@ table1 <-
   ) %>%
   add_n()  # add column with total number of non-missing observations
 table1
-```
-```{r}
 
-table1 <-
-  tbl_summary(
-    data %>% rename(
-      Healthcare =  Kys14Healthcare,
-      StudentHealth = Kys15aStudentHealth,
-      Occupational = Kys15bOccupational,
-      SpecialHealth = Kys15cSpecialHealth,
-      HealthCareCenter = Kys15dHealthCare,
-      Private = Kys15ePrivate
-    ),
-    include = c(
-      Healthcare,
-      StudentHealth,  
-      Occupational,
-      SpecialHealth,
-      HealthCareCenter,
-      Private
-      ),
-    #by =  Kys2Gender
-    
-    #14) Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?
-    #Tämä kysymys siis kertoo, että 97% hakeutui terveydenhuoltoon
-    
-    #15) minne
-    #muutamia vastaajia oli hakeutunut/ohjautunut useampaan eri paikkaan (lähetteet, hakeutuneet itse) Pääosin hakeutuneet työterveyteen tai terveysasemalle
-  ) %>%
-  add_n()  # add column with total number of non-missing observations
-table1
 ```
-```{r}
-
-table1 <-
-  tbl_summary(
-    data %>% rename(
-      Tiredness =  Kys23aTiredness,
-      JointPain = Kys23bJoint,
-      Type2DM = Kys23cType2DM
-    ),
-    include = c(
-      Tiredness,
-      JointPain,  
-      Type2DM
-      ),
-    by =  Kys2Gender
-    #sukupuolittain vai ei?
-    #Noin 40 % jotain oireita, erikosta mielestäni, että ei raportoida yhtään DM2? Voisiko olla, koska sitä ei tiedä välttämättä ilman tutkimuksia? Väsymys ja niveloireet voi kertoa itse.Avoimissa vastauksia muutamia muita oireita ja joistain tehdyistä lisätutkimuksista tuli ilmi muita tehtyjä labroja
-    
-  ) %>%
-  add_n()  # add column with total number of non-missing observations
-table1
-```
-```{r}
-
-table1 <-
-  tbl_summary(
-    data %>% rename(
-      Diagnosis = Kys22Diagnosis
-    ),
-    include = c(
-      Diagnosis
-      ),
-    by =  Kys2Gender
-    
-  ) %>%
-  add_n()  # add column with total number of non-missing observations
-table1
-```
-```{r}
-
-table1 <-
-  tbl_summary(
-    data %>% rename(
-      Relatives = Kys26aFamily,
-      NumberofRelatives = Kys26bNumberofRelatives
-    ),
-    include = c(
-      Relatives,
-      NumberofRelatives
-      ),
-    #by =  Kys2Gender
-    
-  ) %>%
-  add_n()  # add column with total number of non-missing observations
-table1
-
-#kaikki puhuivat läheisilleen. Voisi ajatella, että pitävät merkittävänä tietona. Miten tämä alttius periytyy, pitääkö saada molemmilta vanhemmilta? Otin sukupuolen pois, kootumpi?
-```
-# Distributions of Likert scale questions
 
 
 ```{r} 
@@ -460,10 +393,6 @@ plot(q09,
      include.histogram = FALSE) 
 ```
 
-
-Jonna siirtää legendiä vasemmalle
-
-
 ```{r} 
 items = data %>% 
   select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
@@ -489,6 +418,40 @@ plot(q09,
      text.size=3,
      include.histogram = FALSE)
 ```
+
+
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Healthcare =  Kys14Healthcare,
+      StudentHealth = Kys15aStudentHealth,
+      Occupational = Kys15bOccupational,
+      SpecialHealth = Kys15cSpecialHealth,
+      HealthCareCenter = Kys15dHealthCare,
+      Private = Kys15ePrivate
+    ),
+    include = c(
+      Healthcare,
+      StudentHealth,  
+      Occupational,
+      SpecialHealth,
+      HealthCareCenter,
+      Private
+      ),
+    #by =  Kys2Gender
+    
+    #14) Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?
+    #Tämä kysymys siis kertoo, että 97% hakeutui terveydenhuoltoon
+    
+    #15) minne
+    #muutamia vastaajia oli hakeutunut/ohjautunut useampaan eri paikkaan (lähetteet, hakeutuneet itse) Pääosin hakeutuneet työterveyteen tai terveysasemalle
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+```
+
 ```{r} 
 items = data %>% 
   select(Kys16Flexibility, Kys17Support, Kys18Answers) %>% as.data.frame()
@@ -527,31 +490,21 @@ nlevels = 5
 
 
 ```{r}
-q09 <- likert(
-  items = as.data.frame(items),
-  nlevels = nlevels
-  
-)
-plot(q09, 
-     type = "bar",
-     wrap = 15,
-     legend.position = "bottom",
-     text.size=3,
-     include.histogram = FALSE)
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Diagnosis = Kys22Diagnosis
+    ),
+    include = c(
+      Diagnosis
+      ),
+    by =  Kys2Gender
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
 ```
-```{r} 
-items = data %>% 
-  select(Kys24Influence, Kys25Motivation) %>% as.data.frame()
-colnames(items) <- c(
-  "Uskon, että pystyn vaikuttamaan hemokromatoosiriskiini elintavoillani",
-  "Riskitiedon saaminen motivoi minua huolehtimaan terveydestäni paremmin"
-)
-
-#Miten kys 23 oireista?
-
-nlevels = 5
-```
-
 
 ```{r}
 q09 <- likert(
@@ -566,15 +519,46 @@ plot(q09,
      text.size=3,
      include.histogram = FALSE)
 ```
+
+
+
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Tiredness =  Kys23aTiredness,
+      JointPain = Kys23bJoint,
+      Type2DM = Kys23cType2DM
+    ),
+    include = c(
+      Tiredness,
+      JointPain,  
+      Type2DM
+      ),
+    by =  Kys2Gender
+    #sukupuolittain vai ei?
+    #Noin 40 % jotain oireita, erikosta mielestäni, että ei raportoida yhtään DM2? Voisiko olla, koska sitä ei tiedä välttämättä ilman tutkimuksia? Väsymys ja niveloireet voi kertoa itse.Avoimissa vastauksia muutamia muita oireita ja joistain tehdyistä lisätutkimuksista tuli ilmi muita tehtyjä labroja
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+```
+
 ```{r} 
 items = data %>% 
-  select(Kys5HowOften) %>% as.data.frame()
+  select(Kys24Influence, Kys25Motivation) %>% as.data.frame()
 colnames(items) <- c(
-  "Miten aiot jatkaa verenluovutusta vastaanotettuasi tiedon raudankertymäalttiudesta?"
+  "Uskon, että pystyn vaikuttamaan hemokromatoosiriskiini elintavoillani",
+  "Riskitiedon saaminen motivoi minua huolehtimaan terveydestäni paremmin"
 )
 
-nlevels = 6
+#Miten kys 23 oireista?
+
+nlevels = 5
 ```
+
+
 
 
 ```{r}
@@ -593,7 +577,28 @@ plot(q09,
 #värit tässä, yksi vaihtoehto valkoinen, jossa ei vastauksia, mitäs jos olisi vastauksia?
 #tässä ei auta edes vastausten siirto vasemmalle, koska vastausvaihtoehdot pitkiä ja työntävät palkit kapealle
 ```
-add all the questions here
+
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Relatives = Kys26aFamily,
+      NumberofRelatives = Kys26bNumberofRelatives
+    ),
+    include = c(
+      Relatives,
+      NumberofRelatives
+      ),
+    #by =  Kys2Gender
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+
+#kaikki puhuivat läheisilleen. Voisi ajatella, että pitävät merkittävänä tietona. Miten tämä alttius periytyy, pitääkö saada molemmilta vanhemmilta? Otin sukupuolen pois, kootumpi?
+```
+
 
 
 # Distributions of lab values by gender
@@ -614,21 +619,6 @@ p
 #saisiko naiset skaalattua 0-500 vai onko väliä?
 
 ```   
-
-```{r}
-
-p <- ggplot(data)
-p <- p + geom_density(aes(x=Kys20bFerrit), binwidth = 10)
-p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
-p <- p + xlab("Ferritin µg/l")
-#p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
-p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
-p
-
-
-```   
-
-
 
 
 ```{r}
