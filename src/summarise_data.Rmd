@@ -364,7 +364,7 @@ table1 <-
     #Tämä kysymys siis kertoo, että 97% hakeutui terveydenhuoltoon
     
     #15) minne
-    #muutamia vastaajia oli hakeutunut/ohjautunut useampaan eri paikkaan (lähetteet, hakeutuneet itse)
+    #muutamia vastaajia oli hakeutunut/ohjautunut useampaan eri paikkaan (lähetteet, hakeutuneet itse) Pääosin hakeutuneet työterveyteen tai terveysasemalle
   ) %>%
   add_n()  # add column with total number of non-missing observations
 table1
@@ -391,6 +391,42 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Diagnosis = Kys22Diagnosis
+    ),
+    include = c(
+      Diagnosis
+      ),
+    by =  Kys2Gender
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+```
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Relatives = Kys26aFamily,
+      NumberofRelatives = Kys26bNumberofRelatives
+    ),
+    include = c(
+      Relatives,
+      NumberofRelatives
+      ),
+    #by =  Kys2Gender
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+
+#kaikki puhuivat läheisilleen. Voisi ajatella, että pitävät merkittävänä tietona. Miten tämä alttius periytyy, pitääkö saada molemmilta vanhemmilta? Otin sukupuolen pois, kootumpi?
+```
 # Distributions of Likert scale questions
 
 
@@ -415,10 +451,11 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 15,
+     wrap = 10,
      #legend.position = c(0.3, 0.7),
-     legend.position = "bottom",
-     #legend.title = element_blank(),
+     legend.position = c("left"),
+     legend = element_blank(),
+     #likert.options = 
      text.size=3,
      include.histogram = FALSE) 
 ```
@@ -448,7 +485,7 @@ q09 <- likert(
 plot(q09, 
      type = "bar",
      wrap = 15,
-     legend.position = "bottom",
+     legend.position = "left",
      text.size=3,
      include.histogram = FALSE)
 ```
@@ -554,6 +591,7 @@ plot(q09,
      include.histogram = FALSE)
 
 #värit tässä, yksi vaihtoehto valkoinen, jossa ei vastauksia, mitäs jos olisi vastauksia?
+#tässä ei auta edes vastausten siirto vasemmalle, koska vastausvaihtoehdot pitkiä ja työntävät palkit kapealle
 ```
 add all the questions here
 
@@ -573,6 +611,7 @@ p <- p + xlab("Ferritin µg/l")
 p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
 p
 
+#saisiko naiset skaalattua 0-500 vai onko väliä?
 
 ```   
 
@@ -595,10 +634,11 @@ p
 ```{r}
 
 p <- ggplot(data)
-p <- p + geom_histogram(aes(x=Kys20cTrfesat, fill = Kys2Gender), binwidth = 0.2)
+p <- p + geom_histogram(aes(x=Kys20cTrfesat), binwidth = 0.2)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Transferrin saturation %")
-#p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
+p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
+#samat viitevälit
 #kaikilta ei ole tutkittu, onko excelin merkinnät niiltä osin ok
 p
 
@@ -611,7 +651,7 @@ p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Hemoglobin g/l") + xlim(100,200)
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
-"ks yksi arvo"
+#alaraja 100, yläraja 200 huomioitu, miten viiterajat, eri sukupuolittain?
 p
 
 
@@ -621,26 +661,34 @@ p
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20eMCV), binwidth = 2)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("e-MCV fl")
+p <- p + xlab("e-MCV fl") + xlim(70,110)
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
 p <- p  + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
 p
 
-#joku mättää,mitä muuttaa että näyttäisi järkevältä? Samat viitevälit miehet&naiset. Excelissä muutama tarkistettava kohta!! Miten merkitään vastauksista
+#Samat viitevälit miehet&naiset. yläraja&alaraja huomioitu, yksi hassu arvo putoaa pois
 
 ``` 
 ```{r}
 
 p <- ggplot(data)
-p <- p + geom_histogram(aes(x=Kys20fALAT, fill = Kys2Gender), binwidth = 5)
+p <- p + geom_histogram(aes(x=Kys20fALAT), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("P-ALAT U/l")
-#p <- p + scale_x_log10() + geom_vline(aes(xintercept = , col = "red")) + geom_vline(aes(xintercept = , col = "red"))
+p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
+
 #tässä eri viiterajat miehet/naiset alle 50 /alle 35
+
 
 p
 
 ``` 
+
+
+
+
+
+
 # Disributions of Yes/No questions
 
 ```{r}
@@ -650,9 +698,7 @@ p <- p + geom_bar(aes(x=Kys6EasytoUnderstand))
 p <- p + xlab("Minulle palautettu geenitieto oli helppo ymmärtää")
 p
 
-#Tässä oli vastausvaihtoehtona Kyllä/Ei/EOS - onko hassua että yhtä vaihtoehtoa ei näy
 
-#Saisiko myös näitä Kyllä/Ei kysymyksiä samaan taulukkoon/jotenkin vieretysten, jos aihepiiri suht sama? esim kys 6 (Kyllä, Ei, EOS) 7,8 (Kyllä/Ei)
 ```
 ```{r}
 
@@ -677,7 +723,6 @@ p <- p + geom_bar(aes(x=Kys14Healthcare))
 p <- p + xlab("Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?")
 p
 
-#Miten kysymys 15, saisiko samaan jotenkin järkevästi? Minne hakeuduttu
 ```
 
 ```{r}
@@ -696,6 +741,5 @@ p <- p + geom_bar(aes(x=Kys26aFamily))
 p <- p + xlab("Olen keskustellut hemokromatoosialttiudestani lähisukulaisteni kanssa")
 p
 
-#Miten kysymys 26b, sukulaisten lkm
 
 ```
