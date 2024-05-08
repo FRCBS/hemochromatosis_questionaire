@@ -31,11 +31,11 @@ TODO:
 
 -viimeistele kuvat (värit, raja-arvot, kaikki merkit näkyy)
 
--kumpi kieli
+-kumpi kieli: ENG
 
--dokumentin rakenne, onko kysymykset oikeassa järjestyksessä
+-dokumentin rakenne, onko kysymykset oikeassa järjestyksessä: nyt on numerojärjestyksessä
 
--kun nämä valmiina niin kuvailevaa tekstiä, mitä kuvassa nähdään? vastaako oletuksia? onko jotain poikkevaa? onko jotain terveydellistä merkitystä?
+-kun nämä valmiina niin kuvailevaa tekstiä, mitä kuvassa nähdään? vastaako oletuksia? onko jotain poikkevaa? onko jotain terveydellistä merkitystä? -nämä kommentit työpäiväkirjassa
 
 
 # Data
@@ -313,11 +313,12 @@ p
 items = data %>% 
   select(Kys5HowOften) %>% as.data.frame()
 colnames(items) <- c(
-  "Miten aiot jatkaa verenluovutusta vastaanotettuasi tiedon raudankertymäalttiudesta?"
+  "After receiving genetic information about hemocromatosis, how are you planning to continue to donate?"
 )
 
 nlevels = 6
 ```
+
 ```{r}
 q09 <- likert(
   items = as.data.frame(items),
@@ -333,8 +334,9 @@ plot(q09,
      #likert.options = 
      text.size=2.5,
      include.histogram = FALSE) 
-```
 
+#tässä ei voi siirtää vastausvaihtoehtona vasemmalle ilman että voisi rivittää pitkiä vastausvaihtoehtoja
+```
 
 ```{r}
 
@@ -371,14 +373,13 @@ table1
 items = data %>% 
   select(Kys9Useful, Kys10Worry, Kys11HealthPromotion) %>% as.data.frame()
 colnames(items) <- c(
-  "Geenitiedon vastaanottaminen on hyödyllistä",
-  "Geenitiedon vastaanottaminen ei herättänyt minussa huolta",
-  "Biopankin geenitietoa pitäisi hyödyntää laajemmin terveyden edistämiseksi"
+  "It was useful to receive genetic information",
+  "Receiving genetic information did not worry me",
+  "The genetic information in biobank should be made use of more to prevent health"
 )
 
 nlevels = 5
 ```
-
 
 ```{r}
 q09 <- likert(
@@ -390,7 +391,7 @@ plot(q09,
      type = "bar",
      wrap = 10,
      #legend.position = c(0.3, 0.7),
-     legend.position = c("left"),
+     legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
      text.size=2.5,
@@ -401,13 +402,12 @@ plot(q09,
 items = data %>% 
   select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
 colnames(items) <- c(
-  "Miten geenitiedon vastaanottaminen on vaikuttanut luottamukseesi Veripalvelua kohtaan?",
-  "Miten geenitiedon vastaanottaminen on vaikuttanut haluusi kuulua Veripalvelun Biopankkiin?"
+  "How has receiving genetic information affected to your confidence in Blood Service?",
+  "How has receiving genetic information affected to your willingness to belong to Blood Service Biobank?"
 )
 
 nlevels = 5
 ```
-
 
 ```{r}
 q09 <- likert(
@@ -419,7 +419,8 @@ plot(q09,
      type = "bar",
      wrap = 15,
      legend.position = "left",
-     text.size=3,
+     legend = element_blank(),
+     text.size=2,
      include.histogram = FALSE)
 ```
 
@@ -429,17 +430,17 @@ plot(q09,
 table1 <-
   tbl_summary(
     data %>% rename(
-      Healthcare =  Kys14Healthcare,
+      ApplyingHealthCare =  Kys14Healthcare,
       StudentHealth = Kys15aStudentHealth,
-      Occupational = Kys15bOccupational,
+      OccupationalHealth = Kys15bOccupational,
       SpecialHealth = Kys15cSpecialHealth,
       HealthCareCenter = Kys15dHealthCare,
       Private = Kys15ePrivate
     ),
     include = c(
-      Healthcare,
+      ApplyingHealthCare,
       StudentHealth,  
-      Occupational,
+      OccupationalHealth,
       SpecialHealth,
       HealthCareCenter,
       Private
@@ -458,14 +459,13 @@ table1
 items = data %>% 
   select(Kys16Flexibility, Kys17Support, Kys18Answers) %>% as.data.frame()
 colnames(items) <- c(
-  "Terveydenhuollossa asiaani vietiin sujuvasti eteenpäin",
-  "Sain terveydenhuollossa riittävästi tukea asiaan",
-  "Terveydenhuollossa kysymyksiini osattiin vastata"
+  "My situation was taken care of fluently in health care",
+  "I got enough support from health care",
+  "My questions were answered in health care"
 )
 
 nlevels = 5
 ```
-
 
 ```{r}
 q09 <- likert(
@@ -477,14 +477,15 @@ plot(q09,
      type = "bar",
      wrap = 15,
      legend.position = "bottom",
-     text.size=3,
+     legend = element_blank(),
+     text.size=2,
      include.histogram = FALSE)
 ```
 ```{r} 
 items = data %>% 
   select(Kys19Attitude) %>% as.data.frame()
 colnames(items) <- c(
-  "Terveydenhuollossa geenitiedon palauttamiseen biopankista suhtauduttiin..."
+  "In health care services, the attitude towards the returned information from Biobank was…"
 )
 
 nlevels = 5
@@ -499,7 +500,8 @@ plot(q09,
      type = "bar",
      wrap = 15,
      legend.position = "bottom",
-     text.size=3,
+     legend = element_blank(),
+     text.size=2.5,
      include.histogram = FALSE)
 ```
 
@@ -519,10 +521,6 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
-
-
-
-
 
 ```{r}
 
@@ -551,15 +549,13 @@ table1
 items = data %>% 
   select(Kys24Influence, Kys25Motivation) %>% as.data.frame()
 colnames(items) <- c(
-  "Uskon, että pystyn vaikuttamaan hemokromatoosiriskiini elintavoillani",
-  "Riskitiedon saaminen motivoi minua huolehtimaan terveydestäni paremmin"
+  "I believe I can make an impact with my lifestyle to my predisposition to hemochromatosis",
+  "Receiving genetic information motivates me to take care of my health better"
 )
 
 
 nlevels = 5
 ```
-
-
 
 
 ```{r}
@@ -572,11 +568,10 @@ plot(q09,
      type = "bar",
      wrap = 10,
      legend.position = "bottom",
+     legend = element_blank(),
      text.size=3,
      include.histogram = FALSE)
 
-#värit tässä, yksi vaihtoehto valkoinen, jossa ei vastauksia, mitäs jos olisi vastauksia?
-#tässä ei auta edes vastausten siirto vasemmalle, koska vastausvaihtoehdot pitkiä ja työntävät palkit kapealle
 ```
 
 ```{r}
@@ -630,7 +625,7 @@ p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Transferrin saturation %")
 p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
 #samat viitevälit
-#kaikilta ei ole tutkittu, onko excelin merkinnät niiltä osin ok
+
 p
 
 
@@ -640,7 +635,7 @@ p
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Hemoglobin g/l") + xlim(100,200)
+p <- p + xlab("Hemoglobin g/l") + xlim(120,180)
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
 #alaraja 100, yläraja 200 huomioitu, miten viiterajat, eri sukupuolittain?
 p
@@ -670,15 +665,9 @@ p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xinterce
 
 #tässä eri viiterajat miehet/naiset alle 50 /alle 35
 
-
 p
 
 ``` 
-
-
-
-
-
 
 # Disributions of Yes/No questions
 
@@ -686,7 +675,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys6EasytoUnderstand))
-p <- p + xlab("Minulle palautettu geenitieto oli helppo ymmärtää")
+p <- p + xlab("The received genetic information was easy to understand.")
 p
 
 
@@ -695,7 +684,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys7Understanding))
-p <- p + xlab("Ymmärsitkö biopankkisuostumusta antaessasi, että se voisi oikeasti johtaa terveydelle merkityksellisen tiedon vastaanottamiseen?")
+p <- p + xlab("When you gave your consent for biobank, did you understand it could lead to receiving information relevant to your health?")
 p
 
 ```
@@ -703,7 +692,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys8Future))
-p <- p + xlab("Toivoisitko saavasi vastaavaa tietoa tulevaisuudessa, mikäli sellaista ilmenisi?")
+p <- p + xlab("Would you like to receive similar information in the future, should it appear?")
 p
 
 ```
@@ -711,7 +700,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys14Healthcare))
-p <- p + xlab("Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?")
+p <- p + xlab("After receiving the information, did you apply for health care?")
 p
 
 ```
@@ -720,7 +709,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys22Diagnosis))
-p <- p + xlab("Asetettiinko sinulle kliininen hemokromatoosidiagnoosi (ICD10: E83.1)?")
+p <- p + xlab("Did you get a clinical diagnosis for hemochromatosis (ICD10: E83.1)?")
 p
 
 ```
@@ -729,7 +718,7 @@ p
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys26aFamily))
-p <- p + xlab("Olen keskustellut hemokromatoosialttiudestani lähisukulaisteni kanssa")
+p <- p + xlab("I have discussed about my predisposition to hemochromatosis with my close relatives.")
 p
 
 
