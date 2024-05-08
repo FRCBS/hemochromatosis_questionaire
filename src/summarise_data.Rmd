@@ -309,20 +309,6 @@ p
 
 ```
 
-
-```{r}
-q09 <- likert(
-  items = as.data.frame(items),
-  nlevels = nlevels
-  
-)
-plot(q09, 
-     type = "bar",
-     wrap = 15,
-     legend.position = "bottom",
-     text.size=3,
-     include.histogram = FALSE)
-```
 ```{r} 
 items = data %>% 
   select(Kys5HowOften) %>% as.data.frame()
@@ -332,6 +318,23 @@ colnames(items) <- c(
 
 nlevels = 6
 ```
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 10,
+     #legend.position = c(0.3, 0.7),
+     legend.position = c("bottom"),
+     legend = element_blank(),
+     #likert.options = 
+     text.size=2.5,
+     include.histogram = FALSE) 
+```
+
 
 ```{r}
 
@@ -354,7 +357,8 @@ table1 <-
     #onko tämä kysymys 6 järkevä tänne, vastausvaihtoehto oli myös EOS
     #Kys 7 Ymmärsitkö biopankkisuostumusta antaessasi, että se voisi oikeasti johtaa terveydelle merkityksellisen tiedon vastaanottamiseen?
     #Kys 8 Toivoisitko saavasi vastaavaa tietoa tulevaisuudessa, mikäli sellaista ilmenisi?
-    #tässä näkyy nyt siis Kyllä-vastanneet - luovuttajat ovat ymmärtäneet, että voi johtaa terv.tiedon vastaanottamiseen ja toivoisivat saavansa vastaavaa tietoa tulevaisuudessa. Vastaanotettua tietoa pidettiin ymmärrettävänä. Huom 8a muutamia avoimia vastauksia
+    #nämä kuvina?
+    
     
   ) %>%
   add_n()  # add column with total number of non-missing observations
@@ -389,7 +393,7 @@ plot(q09,
      legend.position = c("left"),
      legend = element_blank(),
      #likert.options = 
-     text.size=3,
+     text.size=2.5,
      include.histogram = FALSE) 
 ```
 
@@ -443,10 +447,8 @@ table1 <-
     #by =  Kys2Gender
     
     #14) Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?
-    #Tämä kysymys siis kertoo, että 97% hakeutui terveydenhuoltoon
-    
     #15) minne
-    #muutamia vastaajia oli hakeutunut/ohjautunut useampaan eri paikkaan (lähetteet, hakeutuneet itse) Pääosin hakeutuneet työterveyteen tai terveysasemalle
+    
   ) %>%
   add_n()  # add column with total number of non-missing observations
 table1
@@ -487,7 +489,19 @@ colnames(items) <- c(
 
 nlevels = 5
 ```
-
+```{r}
+q09 <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+  
+)
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     text.size=3,
+     include.histogram = FALSE)
+```
 
 ```{r}
 
@@ -506,19 +520,7 @@ table1 <-
 table1
 ```
 
-```{r}
-q09 <- likert(
-  items = as.data.frame(items),
-  nlevels = nlevels
-  
-)
-plot(q09, 
-     type = "bar",
-     wrap = 15,
-     legend.position = "bottom",
-     text.size=3,
-     include.histogram = FALSE)
-```
+
 
 
 
@@ -538,7 +540,7 @@ table1 <-
       ),
     by =  Kys2Gender
     #sukupuolittain vai ei?
-    #Noin 40 % jotain oireita, erikosta mielestäni, että ei raportoida yhtään DM2? Voisiko olla, koska sitä ei tiedä välttämättä ilman tutkimuksia? Väsymys ja niveloireet voi kertoa itse.Avoimissa vastauksia muutamia muita oireita ja joistain tehdyistä lisätutkimuksista tuli ilmi muita tehtyjä labroja
+    
     
   ) %>%
   add_n()  # add column with total number of non-missing observations
@@ -553,7 +555,6 @@ colnames(items) <- c(
   "Riskitiedon saaminen motivoi minua huolehtimaan terveydestäni paremmin"
 )
 
-#Miten kys 23 oireista?
 
 nlevels = 5
 ```
@@ -596,7 +597,7 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 
-#kaikki puhuivat läheisilleen. Voisi ajatella, että pitävät merkittävänä tietona. Miten tämä alttius periytyy, pitääkö saada molemmilta vanhemmilta? Otin sukupuolen pois, kootumpi?
+
 ```
 
 
@@ -613,7 +614,7 @@ p <- p + geom_histogram(aes(x=Kys20bFerrit), binwidth = 10)
 p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
 p <- p + xlab("Ferritin µg/l")
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
-p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
+#p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
 p
 
 #saisiko naiset skaalattua 0-500 vai onko väliä?
