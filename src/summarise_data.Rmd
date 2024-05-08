@@ -311,7 +311,86 @@ table1
 
 Taulukko yksi tai kaksi vastausvaihtoehto kysymyksistä
 
+```{r}
 
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      EasytoUnderstand = Kys6EasytoUnderstand,
+      Understanding =  Kys7Understanding,
+      Future = Kys8Future
+    ),
+    include = c(
+      EasytoUnderstand,
+      Understanding,
+      Future
+      ),
+    #by =  Kys2Gender
+    #sukupuolittain vai ei?
+    
+    #Kys 6 Minulle palautettu geenitieto oli helppo ymmärtää
+    #onko tämä kysymys 6 järkevä tänne, vastausvaihtoehto oli myös EOS
+    #Kys 7 Ymmärsitkö biopankkisuostumusta antaessasi, että se voisi oikeasti johtaa terveydelle merkityksellisen tiedon vastaanottamiseen?
+    #Kys 8 Toivoisitko saavasi vastaavaa tietoa tulevaisuudessa, mikäli sellaista ilmenisi?
+    #tässä näkyy nyt siis Kyllä-vastanneet - luovuttajat ovat ymmärtäneet, että voi johtaa terv.tiedon vastaanottamiseen ja toivoisivat saavansa vastaavaa tietoa tulevaisuudessa. Vastaanotettua tietoa pidettiin ymmärrettävänä. Huom 8a muutamia avoimia vastauksia
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+```
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Healthcare =  Kys14Healthcare,
+      StudentHealth = Kys15aStudentHealth,
+      Occupational = Kys15bOccupational,
+      SpecialHealth = Kys15cSpecialHealth,
+      HealthCareCenter = Kys15dHealthCare,
+      Private = Kys15ePrivate
+    ),
+    include = c(
+      Healthcare,
+      StudentHealth,  
+      Occupational,
+      SpecialHealth,
+      HealthCareCenter,
+      Private
+      ),
+    #by =  Kys2Gender
+    
+    #14) Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?
+    #Tämä kysymys siis kertoo, että 97% hakeutui terveydenhuoltoon
+    
+    #15) minne
+    #muutamia vastaajia oli hakeutunut/ohjautunut useampaan eri paikkaan (lähetteet, hakeutuneet itse)
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+```
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Tiredness =  Kys23aTiredness,
+      JointPain = Kys23bJoint,
+      Type2DM = Kys23cType2DM
+    ),
+    include = c(
+      Tiredness,
+      JointPain,  
+      Type2DM
+      ),
+    by =  Kys2Gender
+    #sukupuolittain vai ei?
+    #Noin 40 % jotain oireita, erikosta mielestäni, että ei raportoida yhtään DM2? Voisiko olla, koska sitä ei tiedä välttämättä ilman tutkimuksia? Väsymys ja niveloireet voi kertoa itse.Avoimissa vastauksia muutamia muita oireita ja joistain tehdyistä lisätutkimuksista tuli ilmi muita tehtyjä labroja
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+```
 # Distributions of Likert scale questions
 
 
@@ -336,10 +415,12 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 10,
+     wrap = 15,
+     #legend.position = c(0.3, 0.7),
      legend.position = "bottom",
+     #legend.title = element_blank(),
      text.size=3,
-     include.histogram = FALSE)
+     include.histogram = FALSE) 
 ```
 
 
