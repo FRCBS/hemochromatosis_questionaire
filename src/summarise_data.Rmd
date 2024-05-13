@@ -31,12 +31,6 @@ TODO:
 
 -viimeistele kuvat (värit, raja-arvot, kaikki merkit näkyy)
 
--kumpi kieli: ENG
-
--dokumentin rakenne, onko kysymykset oikeassa järjestyksessä: nyt on numerojärjestyksessä
-
--kun nämä valmiina niin kuvailevaa tekstiä, mitä kuvassa nähdään? vastaako oletuksia? onko jotain poikkevaa? onko jotain terveydellistä merkitystä? -nämä kommentit työpäiväkirjassa
-
 
 # Data
 
@@ -338,7 +332,7 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 20,
+     wrap = 18,
      #legend.position = c(0.3, 0.7),
      legend.position = c("bottom"),
      legend = element_blank(),
@@ -399,8 +393,8 @@ nlevels = 5
 q09 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
-  
 )
+
 plot(q09, 
      type = "bar",
      wrap = 20,
@@ -453,8 +447,14 @@ nlevels = 5
 q09 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
-  
 )
+
+png(filename = "../results/q12.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
 plot(q09, 
      type = "bar",
      wrap = 27,
@@ -517,6 +517,12 @@ q09 <- likert(
   nlevels = nlevels
   
 )
+png(filename = "../results/q16.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
 plot(q09, 
      type = "bar",
      wrap = 15,
@@ -536,13 +542,21 @@ colnames(items) <- c(
 )
 
 nlevels = 5
+
 ```
+
 ```{r}
 q09 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
   
 )
+png(filename = "../results/q19.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
 plot(q09, 
      type = "bar",
      wrap = 15,
@@ -617,6 +631,12 @@ q09 <- likert(
   nlevels = nlevels
   
 )
+png(filename = "../results/q24.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
 plot(q09, 
      type = "bar",
      wrap = 20,
@@ -659,6 +679,13 @@ add here like age
 
 ```{r}
 
+png(filename = "../results/q20b.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20bFerrit), binwidth = 10)
 p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
@@ -672,6 +699,13 @@ p
 
 ```{r}
 
+png(filename = "../results/q20c.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20cTrfesat), binwidth = 0.2)
 p <- p + facet_wrap(. ~ Kys2Gender)
@@ -683,24 +717,46 @@ p
 
 
 ```  
+
 ```{r}
+
+#png(filename = "../results/q20d.png",
+    #units = "mm",
+    #width =  180, 
+    #height = 80,
+    #res=600
+    #)
+
+limits <- tibble(Kys2Gender = c("Male"),Kys20dHemoglobin=c(134,167))
+
+limits <- tibble(Kys2Gender = c("Female"),Kys20dHemoglobin=c(117,155))
 
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Hemoglobin g/l") + xlim(120,180)
+p <- p + xlab("Hemoglobin g/l") + xlim(110,180)
+p <-  p + geom_vline(data=limits,aes(xintercept= Kys20dHemoglobin), col="red")
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
-#alaraja 120, yläraja 180 huomioitu, miten viiterajat, eri sukupuolittain?
+
+#alaraja 110, yläraja 180 huomioitu, viiterajat terveydenhuollosta
+#Miten saa viiterajat toimimaan myös miehillä, missä pitää olla plussa tai joku muu käsky
 p
 
 
 ```  
 ```{r}
 
+png(filename = "../results/q20e.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20eMCV), binwidth = 2)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("e-MCV fl") + xlim(70,110)
+p <- p + xlab("MCV fl") + xlim(70,110)
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
 p <- p  + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
 p
@@ -708,7 +764,15 @@ p
 #Samat viitevälit miehet&naiset. yläraja&alaraja huomioitu, yksi hassu arvo putoaa pois
 
 ``` 
+
 ```{r}
+
+png(filename = "../results/q20f.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
 
 #tässä eri viiterajat miehet alle 50 / naiset alle 35
 limits <- tibble(Kys2Gender = c("Male","Female"),Kys20fALAT=c(50,35))
@@ -738,6 +802,7 @@ p
 #Toimiiko tämä tässä, kun Kyllä/Ei/EOS vaihtoehdot
 
 ```
+
 ```{r}
 
 p <- ggplot(data)
@@ -748,6 +813,7 @@ p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
 
 ```
+
 ```{r}
 
 p <- ggplot(data)
@@ -768,6 +834,13 @@ p
 ```
 
 ```{r}
+
+png(filename = "../results/q22.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys22Diagnosis))
