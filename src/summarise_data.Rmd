@@ -295,9 +295,13 @@ table1 <-
   ) %>%
   add_n()  # add column with total number of non-missing observations
 table1
+
 ```
 
+
+
 ## Age by Gender
+
 
 ```{r}
 
@@ -307,7 +311,12 @@ p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Age in years")
 p
 
+ggsave(plot = p,filename = "../results/age.png", dpi = 600,width =  160, height = 80,units = "mm")
+
+
 ```
+
+
 
 ```{r} 
 items = data %>% 
@@ -327,7 +336,7 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 25,
+     wrap = 20,
      #legend.position = c(0.3, 0.7),
      legend.position = c("bottom"),
      legend = element_blank(),
@@ -397,6 +406,29 @@ plot(q09,
      text.size=2.5,
      include.histogram = FALSE) 
 ```
+
+
+```{r}
+png(filename = "../results/q09.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+plot(q09, 
+     type = "bar",
+     wrap = 20,
+     #legend.position = c(0.3, 0.7),
+     legend.position = c("bottom"),
+     legend = element_blank(),
+     #likert.options = 
+     text.size=2.5,
+     include.histogram = FALSE) 
+dev.off()
+
+```
+
+
 
 ```{r} 
 items = data %>% 
@@ -566,7 +598,7 @@ q09 <- likert(
 )
 plot(q09, 
      type = "bar",
-     wrap = 30,
+     wrap = 20,
      legend.position = "bottom",
      legend = element_blank(),
      text.size=2.5,
@@ -609,7 +641,7 @@ p <- p + geom_histogram(aes(x=Kys20bFerrit), binwidth = 10)
 p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
 p <- p + xlab("Ferritin µg/l")
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
-#p <- p  + geom_vline(aes(xintercept = 15), col = "red") + geom_vline(aes(xintercept = 1000), col = "red")
+p <- p  + geom_vline(aes(xintercept = 15), col = "red") #+ geom_vline(aes(xintercept = 1000), col = "red")
 p
 
 ```   
@@ -655,13 +687,16 @@ p
 ``` 
 ```{r}
 
+#tässä eri viiterajat miehet alle 50 / naiset alle 35
+limits <- tibble(Kys2Gender = c("Male","Female"),Kys20fALAT=c(50,35))
+
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20fALAT), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("P-ALAT U/l")
-p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
+p <-  p + geom_vline(data=limits,aes(xintercept= Kys20fALAT), col="red")
+#p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
 
-#tässä eri viiterajat miehet alle 50 / naiset alle 35
 
 p
 
