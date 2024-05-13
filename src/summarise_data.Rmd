@@ -318,6 +318,8 @@ ggsave(plot = p,filename = "../results/age.png", dpi = 600,width =  160, height 
 
 
 
+=======
+# Likert scales
 ```{r} 
 items = data %>% 
   select(Kys5HowOften) %>% as.data.frame()
@@ -346,7 +348,7 @@ plot(q09,
 
 #tässä ei voi siirtää vastausvaihtoehtona vasemmalle ilman että voisi rivittää pitkiä vastausvaihtoehtoja
 ```
-
+# Table of Questions 6, 7, 8
 ```{r}
 
 table1 <-
@@ -376,7 +378,7 @@ table1 <-
 table1
 
 ```
-
+#Questions 9, 10, 11
 
 ```{r} 
 items = data %>% 
@@ -430,6 +432,8 @@ dev.off()
 
 
 
+=======
+#Questions 12, 13
 ```{r} 
 items = data %>% 
   select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
@@ -455,7 +459,7 @@ plot(q09,
      text.size=2,
      include.histogram = FALSE)
 ```
-
+Table of Q 14, 15
 
 ```{r}
 
@@ -486,7 +490,7 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
-
+#Questions 16, 17, 18
 ```{r} 
 items = data %>% 
   select(Kys16Flexibility, Kys17Support, Kys18Answers) %>% as.data.frame()
@@ -513,6 +517,8 @@ plot(q09,
      text.size=2.5,
      include.histogram = FALSE)
 ```
+#Question 19
+
 ```{r} 
 items = data %>% 
   select(Kys19Attitude) %>% as.data.frame()
@@ -536,7 +542,7 @@ plot(q09,
      text.size=2.5,
      include.histogram = FALSE)
 ```
-
+#Question 22
 ```{r}
 
 table1 <-
@@ -553,7 +559,7 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
-
+#Question 23
 ```{r}
 
 table1 <-
@@ -576,7 +582,7 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
-
+#Questions 24, 25
 ```{r} 
 items = data %>% 
   select(Kys24Influence, Kys25Motivation) %>% as.data.frame()
@@ -605,7 +611,7 @@ plot(q09,
      include.histogram = FALSE)
 
 ```
-
+#Question 26
 ```{r}
 
 table1 <-
@@ -709,6 +715,7 @@ p
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys6EasytoUnderstand))
 p <- p + xlab("The received genetic information was easy to understand.")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
 
 #Toimiiko tämä tässä, kun Kyllä/Ei/EOS vaihtoehdot
@@ -719,6 +726,8 @@ p
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys7Understanding))
 p <- p + xlab("When you gave your consent for biobank,\ndid you understand it could lead to\nreceiving information relevant to your health?")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+
 p
 
 ```
@@ -727,6 +736,7 @@ p
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys8Future))
 p <- p + xlab("Would you like to receive similar information\nin the future, should it appear?")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
 
 ```
@@ -735,6 +745,7 @@ p
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys14Healthcare))
 p <- p + xlab("After receiving the information, did you apply for health care?")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
 
 ```
@@ -744,6 +755,7 @@ p
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys22Diagnosis))
 p <- p + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
 
 ```
@@ -753,6 +765,7 @@ p
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys26aFamily))
 p <- p + xlab("I have discussed about my predisposition\nto hemochromatosis with my close relatives.")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
 
 
