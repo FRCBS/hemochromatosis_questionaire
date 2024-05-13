@@ -381,7 +381,7 @@ table1
 
 ```
 
-# Questions 9, 10, 11
+## Questions 9, 10, 11
 
 ```{r} 
 items = data %>% 
@@ -435,7 +435,7 @@ dev.off()
 
 
 
-# Questions 12, 13
+## Questions 12, 13
 
 
 ```{r} 
@@ -464,7 +464,7 @@ plot(q09,
      include.histogram = FALSE)
 ```
 
-# Table of Q 14, 15
+## Table of Q 14, 15
 
 ```{r}
 
@@ -497,7 +497,7 @@ table1
 ```
 
 
-# Questions 16, 17, 18
+## Questions 16, 17, 18
 
 ```{r} 
 items = data %>% 
@@ -526,7 +526,7 @@ plot(q09,
      include.histogram = FALSE)
 ```
 
-# Question 19
+## Question 19
 
 ```{r} 
 items = data %>% 
@@ -551,7 +551,9 @@ plot(q09,
      text.size=2.5,
      include.histogram = FALSE)
 ```
-#Question 22
+
+##  Question 22
+
 ```{r}
 
 table1 <-
@@ -569,7 +571,7 @@ table1 <-
 table1
 ```
 
-# Question 23
+## Question 23
 
 ```{r}
 
@@ -594,7 +596,7 @@ table1 <-
 table1
 ```
 
-# Questions 24, 25
+## Questions 24, 25
 
 ```{r} 
 items = data %>% 
@@ -625,7 +627,7 @@ plot(q09,
 
 ```
 
-# Question 26
+## Question 26
 
 ```{r}
 
