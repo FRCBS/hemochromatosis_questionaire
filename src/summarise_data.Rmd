@@ -318,7 +318,7 @@ ggsave(plot = p,filename = "../results/age.png", dpi = 600,width =  160, height 
 
 
 
-=======
+
 # Likert scales
 ```{r} 
 items = data %>% 
@@ -348,7 +348,9 @@ plot(q09,
 
 #tässä ei voi siirtää vastausvaihtoehtona vasemmalle ilman että voisi rivittää pitkiä vastausvaihtoehtoja
 ```
-# Table of Questions 6, 7, 8
+
+ Table of Questions 6, 7, 8
+
 ```{r}
 
 table1 <-
@@ -378,7 +380,8 @@ table1 <-
 table1
 
 ```
-#Questions 9, 10, 11
+
+# Questions 9, 10, 11
 
 ```{r} 
 items = data %>% 
@@ -432,8 +435,9 @@ dev.off()
 
 
 
-=======
-#Questions 12, 13
+# Questions 12, 13
+
+
 ```{r} 
 items = data %>% 
   select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
@@ -459,7 +463,8 @@ plot(q09,
      text.size=2,
      include.histogram = FALSE)
 ```
-Table of Q 14, 15
+
+# Table of Q 14, 15
 
 ```{r}
 
@@ -490,7 +495,10 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
-#Questions 16, 17, 18
+
+
+# Questions 16, 17, 18
+
 ```{r} 
 items = data %>% 
   select(Kys16Flexibility, Kys17Support, Kys18Answers) %>% as.data.frame()
@@ -517,7 +525,8 @@ plot(q09,
      text.size=2.5,
      include.histogram = FALSE)
 ```
-#Question 19
+
+# Question 19
 
 ```{r} 
 items = data %>% 
@@ -559,7 +568,9 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
-#Question 23
+
+# Question 23
+
 ```{r}
 
 table1 <-
@@ -582,7 +593,9 @@ table1 <-
   add_n()  # add column with total number of non-missing observations
 table1
 ```
-#Questions 24, 25
+
+# Questions 24, 25
+
 ```{r} 
 items = data %>% 
   select(Kys24Influence, Kys25Motivation) %>% as.data.frame()
@@ -611,7 +624,9 @@ plot(q09,
      include.histogram = FALSE)
 
 ```
-#Question 26
+
+# Question 26
+
 ```{r}
 
 table1 <-
