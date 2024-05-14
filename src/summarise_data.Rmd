@@ -330,9 +330,16 @@ q09 <- likert(
   nlevels = nlevels
   
 )
+png(filename = "../results/q05.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+
 plot(q09, 
      type = "bar",
-     wrap = 18,
+     wrap = 25,
      #legend.position = c(0.3, 0.7),
      legend.position = c("bottom"),
      legend = element_blank(),
@@ -343,27 +350,47 @@ plot(q09,
 #tässä ei voi siirtää vastausvaihtoehtona vasemmalle ilman että voisi rivittää pitkiä vastausvaihtoehtoja
 ```
 
- Table of Questions 6, 7, 8
+## Table of Question 6
 
 ```{r}
 
 table1 <-
   tbl_summary(
     data %>% rename(
-      EasytoUnderstand = Kys6EasytoUnderstand,
+      EasytoUnderstand = Kys6EasytoUnderstand
+    ),
+    include = c(
+      EasytoUnderstand
+      ),
+    #by =  Kys2Gender
+    #sukupuolittain vai ei?
+    
+    #Kys 6 Minulle palautettu geenitieto oli helppo ymmärtää
+    
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+
+```
+
+## Table of Question 7, 8
+
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
       Understanding =  Kys7Understanding,
       Future = Kys8Future
     ),
     include = c(
-      EasytoUnderstand,
       Understanding,
       Future
       ),
     #by =  Kys2Gender
     #sukupuolittain vai ei?
     
-    #Kys 6 Minulle palautettu geenitieto oli helppo ymmärtää
-    #onko tämä kysymys 6 järkevä tänne, vastausvaihtoehto oli myös EOS
     #Kys 7 Ymmärsitkö biopankkisuostumusta antaessasi, että se voisi oikeasti johtaa terveydelle merkityksellisen tiedon vastaanottamiseen?
     #Kys 8 Toivoisitko saavasi vastaavaa tietoa tulevaisuudessa, mikäli sellaista ilmenisi?
     #nämä kuvina?
