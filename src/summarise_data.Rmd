@@ -314,6 +314,8 @@ ggsave(plot = p,filename = "../results/age.png", dpi = 600,width =  160, height 
 
 
 # Likert scales
+
+## Question 5
 ```{r} 
 items = data %>% 
   select(Kys5HowOften) %>% as.data.frame()
@@ -330,12 +332,6 @@ q09 <- likert(
   nlevels = nlevels
   
 )
-png(filename = "../results/q05.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
 
 plot(q09, 
      type = "bar",
@@ -348,6 +344,26 @@ plot(q09,
      include.histogram = FALSE) 
 
 #tässä ei voi siirtää vastausvaihtoehtona vasemmalle ilman että voisi rivittää pitkiä vastausvaihtoehtoja
+```
+```{r}
+png(filename = "../results/q05.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+plot(q09, 
+     type = "bar",
+     wrap = 25,
+     #legend.position = c(0.3, 0.7),
+     legend.position = c("bottom"),
+     legend = element_blank(),
+     #likert.options = 
+     text.size=2.5,
+     include.histogram = FALSE) 
+#dev.off()
+
+
 ```
 
 ## Table of Question 6
@@ -452,7 +468,6 @@ plot(q09,
      include.histogram = FALSE) 
 #dev.off()
 
-
 ```
 
 
@@ -480,12 +495,59 @@ q09 <- likert(
 plot(q09, 
      type = "bar",
      wrap = 27,
-     legend.position = "left",
+     legend.position = "bottom",
      legend = element_blank(),
      text.size=2,
      include.histogram = FALSE)
 
-ggsave(plot = p,filename = "../results/q12.png", dpi = 600,width =  160, height = 80,units = "mm")
+```
+```{r}
+png(filename = "../results/q12.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+plot(q09, 
+     type = "bar",
+     wrap = 27,
+     #legend.position = c(0.3, 0.7),
+     legend.position = c("bottom"),
+     legend = element_blank(),
+     #likert.options = 
+     text.size=2.5,
+     include.histogram = FALSE) 
+#dev.off()
+
+```
+## Table of only Q 15
+
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      StudentHealthCare = Kys15aStudentHealth,
+      OccupationalHealthCare = Kys15bOccupational,
+      SpecialHealthCare = Kys15cSpecialHealth,
+      HealthCareCenter = Kys15dHealthCare,
+      PrivateHealthCare = Kys15ePrivate
+    ),
+    include = c(
+      StudentHealthCare,  
+      OccupationalHealthCare,
+      SpecialHealthCare,
+      HealthCareCenter,
+      PrivateHealthCare
+      ),
+    #by =  Kys2Gender
+    
+    #14) Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?
+    #15) minne
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
 ```
 
 ## Table of Q 14, 15
@@ -495,20 +557,20 @@ ggsave(plot = p,filename = "../results/q12.png", dpi = 600,width =  160, height 
 table1 <-
   tbl_summary(
     data %>% rename(
-      ApplyingHealthCare =  Kys14Healthcare,
-      StudentHealth = Kys15aStudentHealth,
-      OccupationalHealth = Kys15bOccupational,
-      SpecialHealth = Kys15cSpecialHealth,
+      ApplyingtoHealthCare =  Kys14Healthcare,
+      StudentHealthCare = Kys15aStudentHealth,
+      OccupationalHealthCare = Kys15bOccupational,
+      SpecialHealthCare = Kys15cSpecialHealth,
       HealthCareCenter = Kys15dHealthCare,
-      Private = Kys15ePrivate
+      PrivateHealthCare = Kys15ePrivate
     ),
     include = c(
-      ApplyingHealthCare,
-      StudentHealth,  
-      OccupationalHealth,
-      SpecialHealth,
+      ApplyingtoHealthCare,
+      StudentHealthCare,  
+      OccupationalHealthCare,
+      SpecialHealthCare,
       HealthCareCenter,
-      Private
+      PrivateHealthCare
       ),
     #by =  Kys2Gender
     
@@ -541,6 +603,16 @@ q09 <- likert(
   nlevels = nlevels
   
 )
+
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     legend = element_blank(),
+     text.size=2.5,
+     include.histogram = FALSE)
+```
+```{r}
 png(filename = "../results/q16.png",
     units = "mm",
     width =  180, 
@@ -550,12 +622,14 @@ png(filename = "../results/q16.png",
 plot(q09, 
      type = "bar",
      wrap = 15,
-     legend.position = "bottom",
+     legend.position = c("bottom"),
      legend = element_blank(),
+     #likert.options = 
      text.size=2.5,
-     include.histogram = FALSE)
-```
+     include.histogram = FALSE) 
+#dev.off()
 
+```
 ## Question 19
 
 ```{r} 
@@ -575,6 +649,16 @@ q09 <- likert(
   nlevels = nlevels
   
 )
+
+plot(q09, 
+     type = "bar",
+     wrap = 15,
+     legend.position = "bottom",
+     legend = element_blank(),
+     text.size=2.5,
+     include.histogram = FALSE)
+```
+```{r}
 png(filename = "../results/q19.png",
     units = "mm",
     width =  180, 
@@ -584,12 +668,14 @@ png(filename = "../results/q19.png",
 plot(q09, 
      type = "bar",
      wrap = 15,
-     legend.position = "bottom",
+     legend.position = c("bottom"),
      legend = element_blank(),
+     #likert.options = 
      text.size=2.5,
-     include.histogram = FALSE)
-```
+     include.histogram = FALSE) 
+#dev.off()
 
+```
 ##  Question 22
 
 ```{r}
@@ -655,12 +741,7 @@ q09 <- likert(
   nlevels = nlevels
   
 )
-png(filename = "../results/q24.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
+
 plot(q09, 
      type = "bar",
      wrap = 20,
@@ -670,7 +751,24 @@ plot(q09,
      include.histogram = FALSE)
 
 ```
+```{r}
+png(filename = "../results/q24.png",
+    units = "mm",
+    width =  180, 
+    height = 80,
+    res=600
+    )
+plot(q09, 
+     type = "bar",
+     wrap = 20,
+     legend.position = c("bottom"),
+     legend = element_blank(),
+     #likert.options = 
+     text.size=2.5,
+     include.histogram = FALSE) 
+#dev.off()
 
+```
 ## Question 26
 
 ```{r}
