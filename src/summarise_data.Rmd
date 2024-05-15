@@ -450,7 +450,8 @@ plot(q09,
      #likert.options = 
      text.size=2.5,
      include.histogram = FALSE) 
-dev.off()
+#dev.off()
+
 
 ```
 
@@ -476,12 +477,6 @@ q09 <- likert(
   nlevels = nlevels
 )
 
-png(filename = "../results/q12.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
 plot(q09, 
      type = "bar",
      wrap = 27,
@@ -489,6 +484,8 @@ plot(q09,
      legend = element_blank(),
      text.size=2,
      include.histogram = FALSE)
+
+ggsave(plot = p,filename = "../results/q12.png", dpi = 600,width =  160, height = 80,units = "mm")
 ```
 
 ## Table of Q 14, 15
@@ -706,13 +703,6 @@ add here like age
 
 ```{r}
 
-png(filename = "../results/q20b.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
-
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20bFerrit), binwidth = 10)
 p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
@@ -721,17 +711,12 @@ p <- p + xlab("Ferritin µg/l")
 p <- p  + geom_vline(aes(xintercept = 15), col = "red") #+ geom_vline(aes(xintercept = 1000), col = "red")
 p
 
+ggsave(plot = p,filename = "../results/q20b.png", dpi = 600,width =  160, height = 80,units = "mm")
+
 ```   
 
 
 ```{r}
-
-png(filename = "../results/q20c.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
 
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20cTrfesat), binwidth = 0.2)
@@ -742,21 +727,16 @@ p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xinterce
 
 p
 
+ggsave(plot = p,filename = "../results/q20c.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```  
 
 ```{r}
 
-#png(filename = "../results/q20d.png",
-    #units = "mm",
-    #width =  180, 
-    #height = 80,
-    #res=600
-    #)
 
-limits <- tibble(Kys2Gender = c("Male"),Kys20dHemoglobin=c(134,167))
+limits <- tibble(Kys2Gender = c("Male", "Male", "Female", "Female"),Kys20dHemoglobin=c(134,167,117,155))
 
-limits <- tibble(Kys2Gender = c("Female"),Kys20dHemoglobin=c(117,155))
+#limits <- tibble(Kys2Gender = c("Female"),Kys20dHemoglobin=c(117,155))
 
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
@@ -769,16 +749,10 @@ p <-  p + geom_vline(data=limits,aes(xintercept= Kys20dHemoglobin), col="red")
 #Miten saa viiterajat toimimaan myös miehillä, missä pitää olla plussa tai joku muu käsky
 p
 
+ggsave(plot = p,filename = "../results/q20d.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```  
 ```{r}
-
-png(filename = "../results/q20e.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
 
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20eMCV), binwidth = 2)
@@ -788,18 +762,13 @@ p <- p + xlab("MCV fl") + xlim(70,110)
 p <- p  + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
 p
 
+ggsave(plot = p,filename = "../results/q20e.png", dpi = 600,width =  160, height = 80,units = "mm")
+
 #Samat viitevälit miehet&naiset. yläraja&alaraja huomioitu, yksi hassu arvo putoaa pois
 
 ``` 
 
 ```{r}
-
-png(filename = "../results/q20f.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
 
 #tässä eri viiterajat miehet alle 50 / naiset alle 35
 limits <- tibble(Kys2Gender = c("Male","Female"),Kys20fALAT=c(50,35))
@@ -811,6 +780,7 @@ p <- p + xlab("P-ALAT U/l")
 p <-  p + geom_vline(data=limits,aes(xintercept= Kys20fALAT), col="red")
 #p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
 
+ggsave(plot = p,filename = "../results/q20f.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 p
 
@@ -824,7 +794,10 @@ p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys6EasytoUnderstand))
 p <- p + xlab("The received genetic information was easy to understand.")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + scale_x_discrete(drop = FALSE)
 p
+
+ggsave(plot = p,filename = "../results/q06.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 #Toimiiko tämä tässä, kun Kyllä/Ei/EOS vaihtoehdot
 
@@ -836,8 +809,11 @@ p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys7Understanding))
 p <- p + xlab("When you gave your consent for biobank,\ndid you understand it could lead to\nreceiving information relevant to your health?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + scale_x_discrete(drop = FALSE)
 
 p
+
+ggsave(plot = p,filename = "../results/q07.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```
 
@@ -847,7 +823,10 @@ p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys8Future))
 p <- p + xlab("Would you like to receive similar information\nin the future, should it appear?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + scale_x_discrete(drop = FALSE)
 p
+
+ggsave(plot = p,filename = "../results/q08.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```
 ```{r}
@@ -858,22 +837,19 @@ p <- p + xlab("After receiving the information, did you apply for health care?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
 
+ggsave(plot = p,filename = "../results/q14.png", dpi = 600,width =  160, height = 80,units = "mm")
+
 ```
 
 ```{r}
-
-png(filename = "../results/q22.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys22Diagnosis))
 p <- p + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p
+
+ggsave(plot = p,filename = "../results/q22.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```
 
@@ -883,7 +859,10 @@ p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys26aFamily))
 p <- p + xlab("I have discussed about my predisposition\nto hemochromatosis with my close relatives.")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + scale_x_discrete(drop = FALSE)
 p
+
+ggsave(plot = p,filename = "../results/q26.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 
 ```
