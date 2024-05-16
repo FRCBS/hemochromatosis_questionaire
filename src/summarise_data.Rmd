@@ -322,7 +322,7 @@ items = data %>%
 colnames(items) <- c(
   "After receiving genetic information about hemochromatosis, how are you planning to continue to donate?"
 )
-
+# How are you planning to continue blood donation after receiving the information about iron accumulation tendency?
 nlevels = 6
 ```
 
