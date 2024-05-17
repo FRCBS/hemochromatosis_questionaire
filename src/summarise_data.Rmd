@@ -807,6 +807,7 @@ p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
 p <- p + xlab("Ferritin µg/l")
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
 p <- p  + geom_vline(aes(xintercept = 15), col = "red") #+ geom_vline(aes(xintercept = 1000), col = "red")
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/q20b.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -821,6 +822,7 @@ p <- p + geom_histogram(aes(x=Kys20cTrfesat), binwidth = 0.2)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Transferrin saturation %")
 p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
+p <- p + theme_bw()
 #samat viitevälit
 
 p
@@ -841,6 +843,7 @@ p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Hemoglobin g/l") + xlim(110,180)
 p <-  p + geom_vline(data=limits,aes(xintercept= Kys20dHemoglobin), col="red")
+p <- p + theme_bw()
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
 
 #alaraja 110, yläraja 180 huomioitu, viiterajat terveydenhuollosta
@@ -858,6 +861,7 @@ p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("MCV fl") + xlim(70,110)
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
 p <- p  + geom_vline(aes(xintercept = 82, col = "red")) + geom_vline(aes(xintercept = 98, col = "red"))
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/q20e.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -876,6 +880,7 @@ p <- p + geom_histogram(aes(x=Kys20fALAT), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("P-ALAT U/l")
 p <-  p + geom_vline(data=limits,aes(xintercept= Kys20fALAT), col="red")
+p <- p + theme_bw()
 #p <- p + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 50, col = "red"))
 
 ggsave(plot = p,filename = "../results/q20f.png", dpi = 600,width =  160, height = 80,units = "mm")
