@@ -303,14 +303,28 @@ p <- ggplot(data)
 p <- p +  geom_histogram(aes(x=Kys1Age),binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
 p <- p + xlab("Age in years")
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/age.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 
 ```
+# Scatterplot Age and Donation Count
 
+```{r}
 
+p <- ggplot(data)
+p <- p + geom_point(aes(x=Kys1Age, y=Kys3DonationCount))
+p <- p + xlab("Age")
+p <- p + ylab("Donation Count")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + theme_bw()
+
+p
+
+ggsave(plot = p,filename = "../results/AgeDonCount.png", dpi = 600,width =  160, height = 80,units = "mm")
+```
 
 
 # Likert scales
@@ -320,7 +334,7 @@ ggsave(plot = p,filename = "../results/age.png", dpi = 600,width =  160, height 
 items = data %>% 
   select(Kys5HowOften) %>% as.data.frame()
 colnames(items) <- c(
-  "After receiving genetic information about hemochromatosis, how are you planning to continue to donate?"
+  "How are you planning to continue blood donation after receiving the information about iron accumulation tendency?"
 )
 # How are you planning to continue blood donation after receiving the information about iron accumulation tendency?
 nlevels = 6
@@ -801,12 +815,15 @@ add here like age
 
 ```{r}
 
+limits <- tibble(Kys2Gender = c("Male", "Male", "Female", "Female"),Kys20bFerrit=c(20,195,15,125))
+
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20bFerrit), binwidth = 10)
 p <- p + facet_wrap(. ~ Kys2Gender,scales = "free")
 p <- p + xlab("Ferritin µg/l")
+p <-  p + geom_vline(data=limits,aes(xintercept= Kys20bFerrit), col="red")
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 1000, col = "red"))
-p <- p  + geom_vline(aes(xintercept = 15), col = "red") #+ geom_vline(aes(xintercept = 1000), col = "red")
+#p <- p  + geom_vline(aes(xintercept = 15), col = "red") #+ geom_vline(aes(xintercept = 1000), col = "red")
 p <- p + theme_bw()
 p
 
@@ -888,6 +905,45 @@ ggsave(plot = p,filename = "../results/q20f.png", dpi = 600,width =  160, height
 p
 
 ``` 
+# Donor with diagnosis and lab results
+
+```{r}
+#Tämä ei nyt ole se mitä haetaan, yritys oli saada diagnoosin saaneet ja heidän Ferrit & trfesat kuvaan, johon vielä voisi merkitä trfesat yli 30 ja ferrit yli 50. Taulukkoakin kokeilin, mutta siinäkin sitten vain mediaanit ym.
+
+p <- ggplot(data, aes(x = Kys22Diagnosis))
+p <- p + geom_line(aes(y=Kys20bFerrit))
+p <- p + geom_line(aes(y = Kys20cTrfesat))
+p <- p + facet_wrap(. ~ Kys2Gender)
+p <- p + xlab("Diagnosis") #+ xlim(110,180)
+#p <-  p + geom_vline(data=limits,aes(xintercept= Kys20dHemoglobin), col="red")
+p <- p + theme_bw()
+
+p
+
+```
+
+```{r}
+
+table1 <-
+  tbl_summary(
+    data %>% rename(
+      Diagnosis = Kys22Diagnosis,
+      Ferritin = Kys20bFerrit,
+      TransferrinSat = Kys20cTrfesat
+    ),
+    include = c(
+      Diagnosis,
+      Ferritin,
+      TransferrinSat
+      ),
+    by =  Kys2Gender
+    
+  ) %>%
+  add_n()  # add column with total number of non-missing observations
+table1
+
+
+```
 
 # Disributions of Yes/No questions
 
@@ -898,6 +954,7 @@ p <- p + geom_bar(aes(x=Kys6EasytoUnderstand))
 p <- p + xlab("The received genetic information was easy to understand.")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p <- p + scale_x_discrete(drop = FALSE)
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/q06.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -913,6 +970,7 @@ p <- p + geom_bar(aes(x=Kys7Understanding))
 p <- p + xlab("When you gave your consent for biobank,\ndid you understand it could lead to\nreceiving information relevant to your health?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p <- p + scale_x_discrete(drop = FALSE)
+p <- p + theme_bw()
 
 p
 
@@ -927,6 +985,7 @@ p <- p + geom_bar(aes(x=Kys8Future))
 p <- p + xlab("Would you like to receive similar information\nin the future, should it appear?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p <- p + scale_x_discrete(drop = FALSE)
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/q08.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -938,6 +997,7 @@ p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys14Healthcare))
 p <- p + xlab("After receiving the information, did you apply for health care?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/q14.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -950,6 +1010,7 @@ p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys22Diagnosis))
 p <- p + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/q22.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -963,6 +1024,7 @@ p <- p + geom_bar(aes(x=Kys26aFamily))
 p <- p + xlab("I have discussed about my predisposition\nto hemochromatosis with my close relatives.")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p <- p + scale_x_discrete(drop = FALSE)
+p <- p + theme_bw()
 p
 
 ggsave(plot = p,filename = "../results/q26.png", dpi = 600,width =  160, height = 80,units = "mm")
