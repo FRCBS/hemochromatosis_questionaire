@@ -345,6 +345,24 @@ ggsave(plot = p,filename = "../results/AgeDonCount_lm_fer.png", dpi = 600,width 
 
 
 
+
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_point(aes(x=Kys1Age, y=Kys3DonationCount, col=Kys20bFerrit,shape=Kys22Diagnosis) ,size = 4 )
+p <- p + xlab("Age")
+p <- p + ylab("Donation Count")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + theme_bw() + facet_grid(.~Kys2Gender)
+p <- p + geom_smooth(formula = y~x, aes(x=Kys1Age, y=as.numeric(Kys3DonationCount)), method = "lm")
+
+
+p
+
+ggsave(plot = p,filename = "../results/AgeDonCount_lm_fer.png", dpi = 600,width =  160, height = 80,units = "mm")
+```
+
+
 # Likert scales
 
 ## Question 5
