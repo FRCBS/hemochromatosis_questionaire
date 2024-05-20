@@ -310,7 +310,8 @@ ggsave(plot = p,filename = "../results/age.png", dpi = 600,width =  160, height 
 
 
 ```
-# Scatterplot Age and Donation Count
+
+## Scatterplot Age and Donation Count
 
 ```{r}
 
@@ -319,12 +320,29 @@ p <- p + geom_point(aes(x=Kys1Age, y=Kys3DonationCount))
 p <- p + xlab("Age")
 p <- p + ylab("Donation Count")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
-p <- p + theme_bw()
-
+p <- p + theme_bw() + facet_grid(.~Kys2Gender)
 p
 
 ggsave(plot = p,filename = "../results/AgeDonCount.png", dpi = 600,width =  160, height = 80,units = "mm")
 ```
+
+
+```{r}
+
+p <- ggplot(data)
+p <- p + geom_point(aes(x=Kys1Age, y=Kys3DonationCount, col=Kys20bFerrit),size = 4 )
+p <- p + xlab("Age")
+p <- p + ylab("Donation Count")
+p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+p <- p + theme_bw() + facet_grid(.~Kys2Gender)
+p <- p + geom_smooth(formula = y~x, aes(x=Kys1Age, y=as.numeric(Kys3DonationCount)), method = "lm")
+
+
+p
+
+ggsave(plot = p,filename = "../results/AgeDonCount_lm_fer.png", dpi = 600,width =  160, height = 80,units = "mm")
+```
+
 
 
 # Likert scales
@@ -810,8 +828,8 @@ table1
 
 # Distributions of lab values by gender
 
-add here like age
 
+## Ferritin
 
 ```{r}
 
@@ -834,6 +852,18 @@ ggsave(plot = p,filename = "../results/q20b.png", dpi = 600,width =  160, height
 
 ```{r}
 
+data %>% 
+  filter(Kys22Diagnosis == "Yes" ) %>% 
+  filter(Kys20bFerrit >= 50 ) %>%  # pitäskö olla 50 > vai 50 >=
+  group_by(Kys2Gender) %>% count()
+
+```
+
+## TrfSat
+
+
+```{r}
+
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20cTrfesat), binwidth = 0.2)
 p <- p + facet_wrap(. ~ Kys2Gender)
@@ -847,6 +877,18 @@ p
 ggsave(plot = p,filename = "../results/q20c.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```  
+
+```{r}
+
+data %>% 
+  filter(Kys22Diagnosis == "Yes" ) %>% 
+  filter(Kys20cTrfesat >= 30 ) %>% # pitäskö olla 30 > vai 30 >=
+  group_by(Kys2Gender) %>% count()
+
+```
+
+
+## Hb
 
 ```{r}
 
@@ -870,6 +912,10 @@ p
 ggsave(plot = p,filename = "../results/q20d.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```  
+
+## eMCV
+
+
 ```{r}
 
 p <- ggplot(data)
@@ -886,6 +932,9 @@ ggsave(plot = p,filename = "../results/q20e.png", dpi = 600,width =  160, height
 #Samat viitevälit miehet&naiset. yläraja&alaraja huomioitu, yksi hassu arvo putoaa pois
 
 ``` 
+
+
+## fALAT
 
 ```{r}
 
@@ -905,6 +954,8 @@ ggsave(plot = p,filename = "../results/q20f.png", dpi = 600,width =  160, height
 p
 
 ``` 
+
+
 # Donor with diagnosis and lab results
 
 ```{r}
