@@ -27,11 +27,6 @@ library(responsesR)
 ```
 
 
-TODO:
-
--viimeistele kuvat (värit, raja-arvot, kaikki merkit näkyy)
-
-
 # Data
 
 ## Import
@@ -39,6 +34,8 @@ TODO:
 ```{r}
 file <- here("data/Tulokset - hemokromatoosikysely vastaukset (ID 133620).xlsx")
 data <- read_xlsx(file)
+
+#Uusia kohtia kysymys 20, 1) onko testi tehty 2)testin tulos
 
 colnames(data)
 ```
@@ -162,13 +159,15 @@ data <-  data %>%
     Kys12Trust = factor(
       Kys12Trust,
       ordered = TRUE,
-      levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased"))
+      levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")),
+      labels =  rev(c("Grown","Partly grown","Has not affected","Partly decreased","Decreased"))
     ),
     
     Kys13MembertoBiobank = factor(
       Kys13MembertoBiobank,
       ordered = TRUE,
-      levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased"))
+      levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")),
+      labels =  rev(c("Grown","Partly grown","Has not affected","Partly decreased","Decreased"))
     ),
     
     Kys14Healthcare = factor(
@@ -214,11 +213,42 @@ data <-  data %>%
       levels = rev(c("Positive", "Partly positive", "Neutral", "Partly negative", "Negative"))
     ),
     
+    Kys20bDone= factor(
+      Kys20bDone,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys20cDone= factor(
+      Kys20cDone,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys20dDone= factor(
+      Kys20dDone,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys20eDone= factor(
+      Kys20eDone,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
+    Kys20fDone= factor(
+      Kys20fDone,
+      ordered = FALSE,
+      levels = c("Yes", "No")
+    ),
+    
     Kys22Diagnosis = factor(
       Kys22Diagnosis,
       ordered = FALSE,
       levels = c("Yes", "No", "Don't know")
     ),
+    
     
     Kys23aTiredness = factor(
       Kys23aTiredness,
@@ -325,7 +355,7 @@ p
 
 ggsave(plot = p,filename = "../results/AgeDonCount.png", dpi = 600,width =  160, height = 80,units = "mm")
 ```
-
+# Picture of Age, DonCount and Ferritin
 
 ```{r}
 
@@ -343,7 +373,7 @@ p
 ggsave(plot = p,filename = "../results/AgeDonCount_lm_fer.png", dpi = 600,width =  160, height = 80,units = "mm")
 ```
 
-
+# Picture of Age, DonCount, Ferritin and Diagnosis
 
 
 ```{r}
@@ -476,7 +506,7 @@ items = data %>%
 colnames(items) <- c(
   "It was useful to receive genetic information",
   "Receiving genetic information did not worry me",
-  "The genetic information in biobank should be made use of more to prevent health"
+  "The genome data in biobank should be used more widely to promote health"
 )
 
 nlevels = 5
@@ -529,8 +559,8 @@ plot(q09,
 items = data %>% 
   select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
 colnames(items) <- c(
-  "How has receiving genetic information affected to your confidence in Blood Service?",
-  "How has receiving genetic information affected to your willingness to belong to Blood Service Biobank?"
+  "How has receiving genetic information affected on your confidence in Blood Service?",
+  "How has receiving genetic information affected your willingness to belong to Blood Service Biobank?"
 )
 
 nlevels = 5
