@@ -135,7 +135,8 @@ data <-  data %>%
     Kys5HowOften = factor(
       Kys5HowOften,
       ordered = FALSE,
-      levels = rev(c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason, eg. Age or other barrier", "Can not tell"))
+      levels = rev(c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason, eg. Age or other barrier", "Can not tell")),
+      labels = rev(c("More often than nowadays", "As per nowadays", "Less than nowadays", "Quitting donating blood because of the information received", "Quitting donating blood because of another reason", "Can not tell"))
     ),
     
     Kys6EasytoUnderstand = factor(
@@ -406,45 +407,23 @@ colnames(items) <- c(
 nlevels = 6
 ```
 
+
 ```{r}
-q09 <- likert(
-  items = as.data.frame(items),
-  nlevels = nlevels
-  
-)
+p <- ggplot(data)
+p <- p + geom_bar(aes(y=Kys5HowOften))
+p <- p + ylab("")
+p <- p + xlab("How are you planning to continue \nblood donation after receiving the information \nabout iron accumulation tendency?")
+p <- p + theme(plot.margin = unit(c(1,1,1,1),"cm"))
+p <- p + scale_x_discrete(drop = FALSE)
+p <- p + theme_bw()
+p
 
-plot(q09, 
-     type = "bar",
-     wrap = 25,
-     #legend.position = c(0.3, 0.7),
-     legend.position = c("bottom"),
-     legend = element_blank(),
-     #likert.options = 
-     text.size=2.5,
-     include.histogram = FALSE) 
-
-#tässä ei voi siirtää vastausvaihtoehtona vasemmalle ilman että voisi rivittää pitkiä vastausvaihtoehtoja
-```
-```{r}
-png(filename = "../results/q05.png",
-    units = "mm",
-    width =  180, 
-    height = 80,
-    res=600
-    )
-plot(q09, 
-     type = "bar",
-     wrap = 25,
-     #legend.position = c(0.3, 0.7),
-     legend.position = c("bottom"),
-     legend = element_blank(),
-     #likert.options = 
-     text.size=2.5,
-     include.histogram = FALSE) 
-#dev.off()
-
+ggsave(plot = p,filename = "../results/q05.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```
+
+
+
 
 ## Table of Question 6
 
