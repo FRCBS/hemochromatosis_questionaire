@@ -22,6 +22,7 @@ library(gtsummary)
 library(likert)
 library(readxl)
 library(here)
+library(ggcorrplot)
 #library(responsesR)
 
 ```
@@ -1130,3 +1131,61 @@ ggsave(plot = p,filename = "../results/q26.png", dpi = 600,width =  160, height 
 
 
 ```
+
+# Correlation matrix
+
+
+
+```{r}
+
+data_as_no <- data %>% 
+  na.omit %>% 
+  select(
+    -releaseID,
+    -vastaaja,
+    -Kys8Future,
+    -Kys15aStudentHealth,
+    -Kys14Healthcare,
+    -Kys26aFamily,
+    -Kys15ePrivate,
+    -Kys20dDone,
+    -Kys20fDone,
+    -Kys20bDone,
+    -Kys20cDone,
+    -Kys20eDone,
+    -Kys23cType2DM
+    ) %>% 
+  mutate(across(everything(), ~ as.numeric(.x))) 
+  
+  
+
+summary(data_as_no)
+```
+
+
+```{r}
+
+corr <- round(cor(data_as_no), 1)
+p.mat <- cor_pmat(data_as_no)
+
+```
+
+
+
+```{r}
+ggcorrplot(corr, hc.order = TRUE, type = "lower",
+   lab = TRUE)
+```
+
+
+```{r}
+ggcorrplot(corr, hc.order = TRUE,
+    type = "lower", p.mat = p.mat)
+```
+
+
+```{r}
+ggcorrplot(corr, p.mat = p.mat, hc.order = TRUE, lab = TRUE,
+    type = "lower", insig = "blank")
+```
+
