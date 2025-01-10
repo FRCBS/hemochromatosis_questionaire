@@ -1123,16 +1123,24 @@ data_as_no <- data %>%
     -releaseID,
     -vastaaja,
     -Kys8Future,
-    -Kys15aStudentHealth,
     -Kys14Healthcare,
     -Kys26aFamily,
+    -Kys26bNumberofRelatives,
     -Kys15ePrivate,
+    -Kys15aStudentHealth,
     -Kys20dDone,
     -Kys20fDone,
     -Kys20bDone,
     -Kys20cDone,
     -Kys20eDone,
+    -Kys20bFerrit,
+    -Kys20cTrfesat,
+    -Kys20dHemoglobin,
+    -Kys20eMCV,
+    -Kys20fALAT,
     -Kys23cType2DM,
+    -Kys23aTiredness,
+    -Kys23bJoint,
     -Kys20aBHFED     
     ) %>% 
   mutate(across(everything(), ~ as.numeric(.x))) %>% 
@@ -1176,12 +1184,15 @@ ggcorrplot(corr, p.mat = p.mat, hc.order = TRUE, lab = TRUE,
 tmp <- data_as_no %>% 
     select(
     Kys2Gender,
+    Kys3DonationCount,
+    Kys1Age,
     Kys17Support,
     Kys16Flexibility,
-    Kys20dHemoglobin,
-    Kys20eMCV,
     Kys18Answers,
-    Kys24Influence  
+    Kys19Attitude,
+    Kys22Diagnosis,
+    Kys24Influence,
+    Kys25Motivation
 ) %>% 
   mutate(
     Kys2Gender = as.factor(Kys2Gender)
