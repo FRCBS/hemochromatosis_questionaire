@@ -23,6 +23,7 @@ library(likert)
 library(readxl)
 library(here)
 library(ggcorrplot)
+library(GGally)
 #library(responsesR)
 
 ```
@@ -1188,4 +1189,41 @@ ggcorrplot(corr, hc.order = TRUE,
 ggcorrplot(corr, p.mat = p.mat, hc.order = TRUE, lab = TRUE,
     type = "lower", insig = "blank")
 ```
+
+
+```{r}
+
+tmp <- data_as_no %>% 
+    select(
+    Kys2Gender,
+    Kys17Support,
+    Kys16Flexibility,
+    Kys20dHemoglobin,
+    Kys20eMCV,
+    Kys18Answers,
+    Kys24Influence  
+) %>% 
+  mutate(
+    Kys2Gender = as.factor(Kys2Gender)
+  )
+
+my_fn <- function(data, mapping, method="loess", ...){
+      p <- ggplot(data = data, mapping = mapping) + 
+      geom_point() + 
+      geom_smooth(method=method, ...)
+      p
+    }
+
+ggpairs(
+  tmp ,
+  columns = 2:ncol(tmp),
+  ggplot2::aes(colour = Kys2Gender),
+  lower = list(continuous = my_fn)
+)
+
+
+```
+
+It is an artefact created by a single outlier.
+
 
