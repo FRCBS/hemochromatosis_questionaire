@@ -1140,8 +1140,7 @@ ggsave(plot = p,filename = "../results/q26.png", dpi = 600,width =  160, height 
 ```{r}
 
 data_as_no <- data %>% 
-  na.omit %>% 
-  select(
+    select(
     -releaseID,
     -vastaaja,
     -Kys8Future,
@@ -1154,9 +1153,11 @@ data_as_no <- data %>%
     -Kys20bDone,
     -Kys20cDone,
     -Kys20eDone,
-    -Kys23cType2DM
+    -Kys23cType2DM,
+    -Kys20aBHFED     
     ) %>% 
-  mutate(across(everything(), ~ as.numeric(.x))) 
+  mutate(across(everything(), ~ as.numeric(.x))) %>% 
+  na.omit()
   
   
 
