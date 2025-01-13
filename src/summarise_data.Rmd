@@ -1227,3 +1227,40 @@ ggpairs(
 It is an artefact created by a single outlier.
 
 
+```{r}
+
+tmp <- data_as_no %>% 
+    select(
+    Kys2Gender,
+    Kys1Age,
+    Kys10Worry,
+    Kys11HealthPromotion,
+    Kys17Support,
+    Kys16Flexibility,
+    Kys18Answers,
+    Kys24Influence,
+    Kys25Motivation
+) %>% 
+  mutate(
+    Kys2Gender = as.factor(Kys2Gender)
+  )
+
+my_fn <- function(data, mapping, method="loess", ...){
+      p <- ggplot(data = data, mapping = mapping) + 
+      geom_point() + 
+      geom_smooth(method=method, ...)
+      p
+    }
+
+ggpairs(
+  tmp ,
+  columns = 2:ncol(tmp),
+  ggplot2::aes(colour = Kys2Gender),
+  lower = list(continuous = my_fn)
+)
+
+
+```
+
+
+
