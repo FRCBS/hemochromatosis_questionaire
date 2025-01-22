@@ -1150,7 +1150,24 @@ data_as_no <- data %>%
   mutate(across(everything(), ~ as.numeric(.x))) %>% 
   na.omit() %>% 
   rename(
-    Q1_Age = Kys1Age
+    Q1_Age = Kys1Age,
+    Q2_Gender = Kys2Gender,
+    Q3_DonationCount = Kys3DonationCount,
+    Q5_Frequency = Kys5HowOften,
+    Q6_EasytoUnderstand = Kys6EasytoUnderstand,
+    Q7_Understanding = Kys7Understanding,
+    Q9_Usefulness = Kys9Useful,
+    Q10_Worry = Kys10Worry,
+    Q11_HealthPromotion = Kys11HealthPromotion,
+    Q12_Confidence = Kys12Trust,
+    Q13_MembertoBiobank = Kys13MembertoBiobank,
+    Q16_Flexibility = Kys16Flexibility,
+    Q17_Support = Kys17Support,
+    Q18_Answers = Kys18Answers,
+    Q19_Attitude = Kys19Attitude,
+    Q22_Diagnosis = Kys22Diagnosis,
+    Q24_Influence = Kys24Influence,
+    Q25_Motivation = Kys25Motivation
     
   )
   
@@ -1182,8 +1199,11 @@ ggcorrplot(corr, hc.order = TRUE,
 
 
 ```{r}
-ggcorrplot(corr, p.mat = p.mat, hc.order = TRUE, lab = TRUE,
+corr_plot <- ggcorrplot(corr, p.mat = p.mat, hc.order = TRUE, lab = TRUE,
     type = "lower", insig = "blank", sig.level = 0.01)
+
+ggsave(plot = corr_plot, filename = "../results/corr.png", width = 8, height = 6)
+
 ```
 
 
@@ -1191,24 +1211,21 @@ ggcorrplot(corr, p.mat = p.mat, hc.order = TRUE, lab = TRUE,
 
 tmp <- data_as_no %>% 
     select(
-    Kys2Gender,
-    Kys3DonationCount,
-    Kys1Age,
-    Kys9Useful,
-    Kys10Worry,
-    Kys11HealthPromotion,
-    Kys12Trust,
-    Kys13MembertoBiobank,
-    Kys17Support,
-    Kys16Flexibility,
-    Kys18Answers,
-    Kys19Attitude,
-    Kys22Diagnosis,
-    Kys24Influence,
-    Kys25Motivation
+    Q1_Age,
+    Q2_Gender,
+    Q3_DonationCount,
+    Q5_Frequency,
+    Q7_Understanding,
+    Q12_Confidence,
+    Q13_MembertoBiobank,
+    Q16_Flexibility,
+    Q17_Support,
+    Q18_Answers
+   
+    
 ) %>% 
   mutate(
-    Kys2Gender = as.factor(Kys2Gender)
+    Q2_Gender  = as.factor(Q2_Gender)
   )
 
 my_fn <- function(data, mapping, method="loess", ...){
@@ -1221,7 +1238,7 @@ my_fn <- function(data, mapping, method="loess", ...){
 ggpairs(
   tmp ,
   columns = 2:ncol(tmp),
-  ggplot2::aes(colour = Kys2Gender),
+  ggplot2::aes(colour = Q2_Gender),
   lower = list(continuous = my_fn)
 )
 
@@ -1237,6 +1254,7 @@ tmp <- data_as_no %>%
     select(
     Kys2Gender,
     Kys1Age,
+    Kys3DonationCount,
     Kys10Worry,
     Kys11HealthPromotion,
     Kys17Support,
