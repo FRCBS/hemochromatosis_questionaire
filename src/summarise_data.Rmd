@@ -1148,7 +1148,11 @@ data_as_no <- data %>%
     -Kys20aBHFED     
     ) %>% 
   mutate(across(everything(), ~ as.numeric(.x))) %>% 
-  na.omit()
+  na.omit() %>% 
+  rename(
+    Q1_Age = Kys1Age
+    
+  )
   
   
 
@@ -1173,13 +1177,13 @@ ggcorrplot(corr, hc.order = TRUE, type = "lower",
 
 ```{r}
 ggcorrplot(corr, hc.order = TRUE,
-    type = "lower", p.mat = p.mat)
+    type = "lower", p.mat = p.mat, sig.level = 0.01)
 ```
 
 
 ```{r}
 ggcorrplot(corr, p.mat = p.mat, hc.order = TRUE, lab = TRUE,
-    type = "lower", insig = "blank")
+    type = "lower", insig = "blank", sig.level = 0.01)
 ```
 
 
