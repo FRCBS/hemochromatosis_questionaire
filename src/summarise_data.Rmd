@@ -1123,6 +1123,8 @@ data_as_no <- data %>%
     -releaseID,
     -vastaaja,
     -Kys4YearStarted,
+    -Kys6EasytoUnderstand,
+    -Kys7Understanding,
     -Kys8Future,
     -Kys14Healthcare,
     -Kys26aFamily,
@@ -1154,8 +1156,6 @@ data_as_no <- data %>%
     Q2_Gender = Kys2Gender,
     Q3_DonationCount = Kys3DonationCount,
     Q5_Frequency = Kys5HowOften,
-    Q6_EasytoUnderstand = Kys6EasytoUnderstand,
-    Q7_Understanding = Kys7Understanding,
     Q9_Usefulness = Kys9Useful,
     Q10_Worry = Kys10Worry,
     Q11_HealthPromotion = Kys11HealthPromotion,
@@ -1215,7 +1215,6 @@ tmp <- data_as_no %>%
     Q2_Gender,
     Q3_DonationCount,
     Q5_Frequency,
-    Q7_Understanding,
     Q12_Confidence,
     Q13_MembertoBiobank,
     Q16_Flexibility,
@@ -1252,19 +1251,20 @@ It is an artefact created by a single outlier.
 
 tmp <- data_as_no %>% 
     select(
-    Kys2Gender,
-    Kys1Age,
-    Kys3DonationCount,
-    Kys10Worry,
-    Kys11HealthPromotion,
-    Kys17Support,
-    Kys16Flexibility,
-    Kys18Answers,
-    Kys24Influence,
-    Kys25Motivation
+    Q2_Gender,
+    Q1_Age,
+    Q3_DonationCount,
+    Q5_Frequency,
+    Q10_Worry,
+    Q11_HealthPromotion,
+    Q17_Support,
+    Q16_Flexibility,
+    Q18_Answers,
+    Q24_Influence,
+    Q25_Motivation
 ) %>% 
   mutate(
-    Kys2Gender = as.factor(Kys2Gender)
+    Q2_Gender = as.factor(Q2_Gender)
   )
 
 my_fn <- function(data, mapping, method="loess", ...){
@@ -1277,7 +1277,7 @@ my_fn <- function(data, mapping, method="loess", ...){
 ggpairs(
   tmp ,
   columns = 2:ncol(tmp),
-  ggplot2::aes(colour = Kys2Gender),
+  ggplot2::aes(colour = Q2_Gender),
   lower = list(continuous = my_fn)
 )
 
