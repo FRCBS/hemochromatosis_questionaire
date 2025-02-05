@@ -37,8 +37,6 @@ library(GGally)
 file <- here("data/Tulokset - hemokromatoosikysely vastaukset (ID 133620).xlsx")
 data <- read_xlsx(file)
 
-#Uusia kohtia kysymys 20, 1) onko testi tehty 2)testin tulos
-
 colnames(data)
 ```
 
@@ -354,6 +352,7 @@ p <- p + xlab("Age")
 p <- p + ylab("Donation Count")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p <- p + theme_bw() + facet_grid(.~Kys2Gender)
+p <- p + theme(text = element_text(size = 20))
 p
 
 ggsave(plot = p,filename = "../results/AgeDonCount.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -439,11 +438,7 @@ table1 <-
     include = c(
       EasytoUnderstand
       ),
-    #by =  Kys2Gender
-    #sukupuolittain vai ei?
-    
-    #Kys 6 Minulle palautettu geenitieto oli helppo ymmärtää
-    
+ 
     
   ) %>%
   add_n()  # add column with total number of non-missing observations
@@ -465,13 +460,7 @@ table1 <-
       Understanding,
       Future
       ),
-    #by =  Kys2Gender
-    #sukupuolittain vai ei?
-    
-    #Kys 7 Ymmärsitkö biopankkisuostumusta antaessasi, että se voisi oikeasti johtaa terveydelle merkityksellisen tiedon vastaanottamiseen?
-    #Kys 8 Toivoisitko saavasi vastaavaa tietoa tulevaisuudessa, mikäli sellaista ilmenisi?
-    #nämä kuvina?
-    
+ 
     
   ) %>%
   add_n()  # add column with total number of non-missing observations
@@ -506,8 +495,18 @@ plot(q09,
      legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
-     text.size=2.5,
-     include.histogram = FALSE) 
+     text.size=5,
+     include.histogram = FALSE
+) 
+
+plot + theme(
+  text = element_text(size = 20),
+  axis.text = element_text(size = 12),
+  axis.title = element_text(size = 16),
+  legend.text = element_text(size = 12)
+)
+
+#tämä viimeisin ei tee mitään?
 ```
 
 
@@ -581,6 +580,8 @@ plot(q09,
 #dev.off()
 
 ```
+
+
 ## Table of only Q 15
 
 ```{r}
@@ -601,10 +602,7 @@ table1 <-
       HealthCareCenter,
       PrivateHealthCare
       ),
-    #by =  Kys2Gender
-    
-    #14) Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?
-    #15) minne
+   
     
   ) %>%
   add_n()  # add column with total number of non-missing observations
@@ -633,10 +631,7 @@ table1 <-
       HealthCareCenter,
       PrivateHealthCare
       ),
-    #by =  Kys2Gender
-    
-    #14) Hakeuduitko tiedon saatuasi terveydenhuollon palveluihin?
-    #15) minne
+  
     
   ) %>%
   add_n()  # add column with total number of non-missing observations
@@ -773,7 +768,6 @@ table1 <-
       Type2DM
       ),
     by =  Kys2Gender
-    #sukupuolittain vai ei?
     
     
   ) %>%
@@ -883,7 +877,7 @@ ggsave(plot = p,filename = "../results/q20b.png", dpi = 600,width =  160, height
 
 data %>% 
   filter(Kys22Diagnosis == "Yes" ) %>% 
-  filter(Kys20bFerrit >= 50 ) %>%  # pitäskö olla 50 > vai 50 >=
+  filter(Kys20bFerrit >= 50 ) %>%  
   group_by(Kys2Gender) %>% count()
 
 ```
@@ -924,7 +918,6 @@ data %>%
 
 limits <- tibble(Kys2Gender = c("Male", "Male", "Female", "Female"),Kys20dHemoglobin=c(134,167,117,155))
 
-#limits <- tibble(Kys2Gender = c("Female"),Kys20dHemoglobin=c(117,155))
 
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
@@ -934,8 +927,6 @@ p <-  p + geom_vline(data=limits,aes(xintercept= Kys20dHemoglobin), col="red")
 p <- p + theme_bw()
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
 
-#alaraja 110, yläraja 180 huomioitu, viiterajat terveydenhuollosta
-#Miten saa viiterajat toimimaan myös miehillä, missä pitää olla plussa tai joku muu käsky
 p
 
 ggsave(plot = p,filename = "../results/q20d.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -958,7 +949,7 @@ p
 
 ggsave(plot = p,filename = "../results/q20e.png", dpi = 600,width =  160, height = 80,units = "mm")
 
-#Samat viitevälit miehet&naiset. yläraja&alaraja huomioitu, yksi hassu arvo putoaa pois
+
 
 ``` 
 
@@ -988,7 +979,7 @@ p
 # Donor with diagnosis and lab results
 
 ```{r}
-#Tämä ei nyt ole se mitä haetaan, yritys oli saada diagnoosin saaneet ja heidän Ferrit & trfesat kuvaan, johon vielä voisi merkitä trfesat yli 30 ja ferrit yli 50. Taulukkoakin kokeilin, mutta siinäkin sitten vain mediaanit ym.
+
 
 p <- ggplot(data, aes(x = Kys22Diagnosis))
 p <- p + geom_line(aes(y=Kys20bFerrit))
@@ -1039,7 +1030,6 @@ p
 
 ggsave(plot = p,filename = "../results/q06.png", dpi = 600,width =  160, height = 80,units = "mm")
 
-#Toimiiko tämä tässä, kun Kyllä/Ei/EOS vaihtoehdot
 
 ```
 
@@ -1281,7 +1271,6 @@ ggpairs(
   lower = list(continuous = my_fn)
 )
 
-#kommentti
 
 
 ```
