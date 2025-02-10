@@ -526,7 +526,7 @@ plot(q09,
      #likert.options = 
      text.size=2.5,
      include.histogram = FALSE) 
-#dev.off()
+dev.off()
 
 ```
 
@@ -547,12 +547,12 @@ nlevels = 5
 ```
 
 ```{r}
-q09 <- likert(
+q12 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
 )
 
-plot(q09, 
+plot(q12, 
      type = "bar",
      wrap = 27,
      legend.position = "bottom",
@@ -568,7 +568,7 @@ png(filename = "../results/q12.png",
     height = 80,
     res=600
     )
-plot(q09, 
+plot(q12, 
      type = "bar",
      wrap = 27,
      #legend.position = c(0.3, 0.7),
@@ -654,13 +654,13 @@ nlevels = 5
 ```
 
 ```{r}
-q09 <- likert(
+q16 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
   
 )
 
-plot(q09, 
+plot(q16, 
      type = "bar",
      wrap = 15,
      legend.position = "bottom",
@@ -675,7 +675,7 @@ png(filename = "../results/q16.png",
     height = 80,
     res=600
     )
-plot(q09, 
+plot(q16, 
      type = "bar",
      wrap = 15,
      legend.position = c("bottom"),
@@ -700,13 +700,13 @@ nlevels = 5
 ```
 
 ```{r}
-q09 <- likert(
+q19 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
   
 )
 
-plot(q09, 
+plot(q19, 
      type = "bar",
      wrap = 15,
      legend.position = "bottom",
@@ -721,7 +721,7 @@ png(filename = "../results/q19.png",
     height = 80,
     res=600
     )
-plot(q09, 
+plot(q19, 
      type = "bar",
      wrap = 15,
      legend.position = c("bottom"),
@@ -791,13 +791,13 @@ nlevels = 5
 
 
 ```{r}
-q09 <- likert(
+q24 <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
   
 )
 
-plot(q09, 
+plot(q24, 
      type = "bar",
      wrap = 20,
      legend.position = "bottom",
@@ -813,7 +813,7 @@ png(filename = "../results/q24.png",
     height = 80,
     res=600
     )
-plot(q09, 
+plot(q24, 
      type = "bar",
      wrap = 20,
      legend.position = c("bottom"),
