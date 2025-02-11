@@ -495,7 +495,7 @@ plot(q09,
      legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
-     text.size=3.5,
+     text.size=3,
      include.histogram = FALSE
 ) 
 
@@ -517,7 +517,7 @@ plot(q09,
      legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
-     text.size=3.5,
+     text.size=3,
      include.histogram = FALSE
 ) 
 dev.off()
@@ -551,7 +551,7 @@ plot(q12,
      wrap = 27,
      legend.position = "bottom",
      legend = element_blank(),
-     text.size=2,
+     text.size=3,
      include.histogram = FALSE)
 
 ```
@@ -569,9 +569,9 @@ plot(q12,
      legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
-     text.size=2.5,
+     text.size=3,
      include.histogram = FALSE) 
-#dev.off()
+dev.off()
 
 ```
 
@@ -677,7 +677,7 @@ plot(q16,
      #likert.options = 
      text.size=2.5,
      include.histogram = FALSE) 
-#dev.off()
+dev.off()
 
 ```
 ## Question 19
@@ -723,7 +723,7 @@ plot(q19,
      #likert.options = 
      text.size=2.5,
      include.histogram = FALSE) 
-#dev.off()
+dev.off()
 
 ```
 ##  Question 22
@@ -796,7 +796,7 @@ plot(q24,
      wrap = 20,
      legend.position = "bottom",
      legend = element_blank(),
-     text.size=2.5,
+     text.size=3,
      include.histogram = FALSE)
 
 ```
@@ -813,9 +813,9 @@ plot(q24,
      legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
-     text.size=2.5,
+     text.size=3,
      include.histogram = FALSE) 
-#dev.off()
+dev.off()
 
 ```
 ## Question 26
@@ -1163,7 +1163,7 @@ summary(data_as_no)
 
 ```{r}
 
-corr <- round(cor(data_as_no), 1)
+corr <- round(cor(data_as_no, method = "spearman"), 1)
 p.mat <- cor_pmat(data_as_no)
 
 ```
