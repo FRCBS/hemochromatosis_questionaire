@@ -495,18 +495,11 @@ plot(q09,
      legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
-     text.size=5,
+     text.size=3.5,
      include.histogram = FALSE
 ) 
 
-plot + theme(
-  text = element_text(size = 20),
-  axis.text = element_text(size = 12),
-  axis.title = element_text(size = 16),
-  legend.text = element_text(size = 12)
-)
 
-#tämä viimeisin ei tee mitään?
 ```
 
 
@@ -524,8 +517,9 @@ plot(q09,
      legend.position = c("bottom"),
      legend = element_blank(),
      #likert.options = 
-     text.size=2.5,
-     include.histogram = FALSE) 
+     text.size=3.5,
+     include.histogram = FALSE
+) 
 dev.off()
 
 ```
