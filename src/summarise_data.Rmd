@@ -352,7 +352,7 @@ p <- p + xlab("Age")
 p <- p + ylab("Donation Count")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p <- p + theme_bw() + facet_grid(.~Kys2Gender)
-p <- p + theme(text = element_text(size = 20))
+p <- p + theme(text = element_text(size = 15))
 p
 
 ggsave(plot = p,filename = "../results/AgeDonCount.png", dpi = 600,width =  160, height = 80,units = "mm")
@@ -1221,11 +1221,12 @@ my_fn <- function(data, mapping, method="loess", ...){
     }
 
 ggpairs(
-  tmp ,
-  columns = 2:ncol(tmp),
-  ggplot2::aes(colour = Q2_Gender),
+  method = "spearman",
+  tmp, 
+  columns = 2:ncol(tmp), 
+  ggplot2::aes(colour = Q2_Gender), 
   lower = list(continuous = my_fn)
-)
+  )
 
 
 ```
@@ -1243,9 +1244,12 @@ tmp <- data_as_no %>%
     Q5_Frequency,
     Q10_Worry,
     Q11_HealthPromotion,
-    Q17_Support,
+    Q12_Confidence,
+    Q13_MembertoBiobank,
     Q16_Flexibility,
+    Q17_Support,
     Q18_Answers,
+    Q19_Attitude,
     Q24_Influence,
     Q25_Motivation
 ) %>% 
@@ -1261,12 +1265,12 @@ my_fn <- function(data, mapping, method="loess", ...){
     }
 
 ggpairs(
-  tmp ,
-  columns = 2:ncol(tmp),
-  ggplot2::aes(colour = Q2_Gender),
+  method = "spearman",
+  tmp, 
+  columns = 2:ncol(tmp), 
+  ggplot2::aes(colour = Q2_Gender), 
   lower = list(continuous = my_fn)
-)
-
+  )
 
 
 ```
