@@ -10,7 +10,6 @@ output:
 
 
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -24,6 +23,7 @@ library(readxl)
 library(here)
 library(ggcorrplot)
 library(GGally)
+library(patchwork)
 #library(responsesR)
 
 ```
@@ -323,6 +323,13 @@ table1
 
 ```
 
+```{r}
+table1 |> 
+  as_gt()|>
+  gt::gtsave(
+    filename = here("results/hemoquest_table1.docx")
+    ) # use extensions .png, .html, .docx, .rtf, .tex, .ltx
+```
 
 
 ## Age by Gender
@@ -374,6 +381,11 @@ p
 
 ggsave(plot = p,filename = "../results/AgeDonCount_lm_fer.png", dpi = 600,width =  160, height = 80,units = "mm")
 ```
+
+
+
+
+
 
 # Picture of Age, DonCount, Ferritin and Diagnosis
 
@@ -488,7 +500,7 @@ q09 <- likert(
   nlevels = nlevels
 )
 
-plot(q09, 
+pq09 <- plot(q09, 
      type = "bar",
      wrap = 20,
      #legend.position = c(0.3, 0.7),
@@ -499,6 +511,7 @@ plot(q09,
      include.histogram = FALSE
 ) 
 
+pq09
 
 ```
 
@@ -546,14 +559,14 @@ q12 <- likert(
   nlevels = nlevels
 )
 
-plot(q12, 
+pq12 <- plot(q12, 
      type = "bar",
      wrap = 27,
      legend.position = "bottom",
      legend = element_blank(),
      text.size=3,
      include.histogram = FALSE)
-
+pq12
 ```
 ```{r}
 png(filename = "../results/q12.png",
@@ -791,13 +804,14 @@ q24 <- likert(
   
 )
 
-plot(q24, 
+pq24 <- plot(q24, 
      type = "bar",
      wrap = 20,
      legend.position = "bottom",
      legend = element_blank(),
      text.size=3,
      include.histogram = FALSE)
+pq24
 
 ```
 ```{r}
@@ -840,6 +854,9 @@ table1
 
 
 ```
+
+
+
 
 
 
@@ -970,6 +987,129 @@ p
 ``` 
 
 
+## Lab value table
+
+```{r}
+
+labsum <- data %>%
+  #add HUS cut-offs
+  mutate(
+    #https://diagnostiikka.hus.fi/tutkimus?id=4826
+    #but 50 is not the upper limit
+    Fe_HUScut = case_when(
+      is.na(Kys20bFerrit) ~ NA,
+      Kys20bFerrit < 15  & Kys2Gender == "Female" ~ "below",
+      Kys20bFerrit < 20  & Kys2Gender == "Male"  ~ "below",
+      Kys20bFerrit > 50 ~ "above",
+      (Kys20bFerrit >= 15 & Kys20bFerrit <=50) & Kys2Gender == "Female"   ~ "normal",
+      (Kys20bFerrit >= 20 & Kys20bFerrit <=50) & Kys2Gender == "Male"   ~ "normal",
+      TRUE ~ NA),
+      #https://diagnostiikka.hus.fi/tutkimus?id=8855
+    TrfSat_HUScut = case_when(
+      is.na(Kys20cTrfesat) ~ NA,
+      Kys20cTrfesat < 17  ~ "below",
+      Kys20cTrfesat > 52 ~ "above",
+      Kys20cTrfesat >= 17 & Kys20cTrfesat <=52   ~ "above",
+      TRUE ~ NA
+    ),
+    #https://diagnostiikka.hus.fi/tutkimus?id=1552
+    Hb_HUScut =case_when( 
+      is.na(Kys20dHemoglobin) ~ NA,
+      Kys20dHemoglobin < 117  & Kys2Gender == "Female" ~ "below",
+      Kys20dHemoglobin < 134  & Kys2Gender == "Male"  ~ "below",
+      Kys20dHemoglobin > 155  & Kys2Gender == "Female" ~ "above",
+      Kys20dHemoglobin > 167  & Kys2Gender == "Male"  ~ "above",
+      (Kys20dHemoglobin >= 117 & Kys20dHemoglobin <=155) & Kys2Gender == "Female"   ~ "normal",
+      (Kys20dHemoglobin >= 134 & Kys20dHemoglobin <=167) & Kys2Gender == "Male"   ~ "normal",
+      TRUE ~ NA),
+    #https://diagnostiikka.hus.fi/tutkimus?id=2475
+    eMCV_HUScut =case_when( 
+      is.na(Kys20eMCV) ~ NA,
+      Kys20eMCV < 82  & Kys2Gender == "Female" ~ "below",
+      Kys20eMCV < 82  & Kys2Gender == "Male"  ~ "below",
+      Kys20eMCV > 98  & Kys2Gender == "Female" ~ "above",
+      Kys20eMCV > 98  & Kys2Gender == "Male"  ~ "above",
+      (Kys20eMCV >= 82 & Kys20eMCV <=98) & Kys2Gender == "Female"   ~ "normal",
+      (Kys20eMCV >= 82 & Kys20eMCV <=98) & Kys2Gender == "Male"   ~ "normal",
+      TRUE ~ NA),
+#https://diagnostiikka.hus.fi/tutkimus?id=1024
+    fALAT_HUScut =case_when( 
+      is.na(Kys20fALAT) ~ NA,
+      Kys20fALAT < 35  & Kys2Gender == "Female" ~ "below",
+      Kys20fALAT < 50  & Kys2Gender == "Male"  ~ "below",
+      (Kys20fALAT >= 35 ) & Kys2Gender == "Female"   ~ "normal",
+      (Kys20fALAT >= 50 ) & Kys2Gender == "Male"   ~ "normal",
+      TRUE ~ NA)
+  ) %>% select(Kys1Age, 
+               Kys2Gender,
+               Kys20bFerrit,
+               Fe_HUScut,
+               Kys20cTrfesat,
+               TrfSat_HUScut,
+               Kys20dHemoglobin,
+               Hb_HUScut,
+               Kys20eMCV,
+               eMCV_HUScut,
+               Kys20fALAT,
+               fALAT_HUScut)
+
+
+labsumsum <- labsum %>%   group_by(Kys2Gender) %>% 
+  summarise(
+    center_hb = median(Kys20dHemoglobin,na.rm=TRUE),
+    var_hb = mad(Kys20dHemoglobin,na.rm=TRUE),
+    above_hb = sum(if_else(Hb_HUScut == "above",1,0),na.rm=TRUE),
+    below_hb = sum(if_else(Hb_HUScut == "below",1,0),na.rm=TRUE),
+    center_fer = median(Kys20bFerrit,na.rm=TRUE),
+    var_fer = mad(Kys20bFerrit,na.rm=TRUE),
+    above_fer = sum(if_else(Fe_HUScut == "above",1,0),na.rm=TRUE),
+    below_fer = sum(if_else(Fe_HUScut == "below",1,0),na.rm=TRUE),
+    center_tfrsat = median(Kys20cTrfesat,na.rm=TRUE),
+    var_tfrsat = mad(Kys20cTrfesat,na.rm=TRUE),
+    above_tfrsat = sum(if_else(TrfSat_HUScut == "above",1,0),na.rm=TRUE),
+    below_tfrsat = sum(if_else(TrfSat_HUScut == "below",1,0),na.rm=TRUE),
+    center_emcv = median(Kys20eMCV,na.rm=TRUE),
+    var_emcv = mad(Kys20eMCV,na.rm=TRUE),
+    above_emcv = sum(if_else(eMCV_HUScut == "above",1,0),na.rm=TRUE),
+    below_emcv = sum(if_else(eMCV_HUScut == "below",1,0),na.rm=TRUE),
+    center_alat = median(Kys20fALAT,na.rm=TRUE),
+    var_alat = mad(Kys20fALAT,na.rm=TRUE),
+    above_alat = sum(if_else(fALAT_HUScut == "above",1,0),na.rm=TRUE),
+    below_alat = sum(if_else(fALAT_HUScut == "below",1,0),na.rm=TRUE),
+    
+  ) %>% pivot_longer(
+    cols=contains("_"),
+    names_to = c("Var",".value"),
+    names_sep = "_"
+  ) %>% 
+  arrange(Var,Kys2Gender) %>% 
+  rename(
+    Sex = Kys2Gender,
+    Statistic = Var,
+    'Haemoglobin (g/L)' = hb,
+    "Ferrin ug/L" =fer,
+    "Transferrin Saturation (%)" =tfrsat,
+    "eMCV (fl)" = emcv,
+    "Alanine aminotransferase (U/L)" = alat
+  ) %>% 
+  mutate(
+    across(3:7,round,digits=0) 
+  ) %>%  
+  mutate(
+    Statistic = factor(Statistic, labels =c("Above","Below","Median","MAD"))
+  )
+labsumsum
+
+```
+
+```{r}
+write_tsv(
+  labsumsum,
+  file = here("results/labsum.tsv")
+)
+```
+
+
 # Donor with diagnosis and lab results
 
 ```{r}
@@ -1070,14 +1210,14 @@ ggsave(plot = p,filename = "../results/q14.png", dpi = 600,width =  160, height 
 
 ```{r}
 
-p <- ggplot(data)
-p <- p + geom_bar(aes(x=Kys22Diagnosis))
-p <- p + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?")
-p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
-p <- p + theme_bw()
-p
+pq22 <- ggplot(data)
+pq22 <- pq22 + geom_bar(aes(x=Kys22Diagnosis))
+pq22 <- pq22 + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?")
+pq22 <- pq22 + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+pq22 <- pq22 + theme_bw()
+pq22
 
-ggsave(plot = p,filename = "../results/q22.png", dpi = 600,width =  160, height = 80,units = "mm")
+ggsave(plot = pq22,filename = "../results/q22.png", dpi = 600,width =  160, height = 80,units = "mm")
 
 ```
 
@@ -1095,6 +1235,123 @@ ggsave(plot = p,filename = "../results/q26.png", dpi = 600,width =  160, height 
 
 
 ```
+
+# Pub pic
+
+
+```{r}
+
+text.size <- 3
+
+xpq24 <- plot(q24, 
+     type = "bar",
+     wrap = 20,
+     legend.position = "bottom",
+     legend = element_blank(),
+     text.size=text.size,
+     include.histogram = FALSE)
+
+
+xpq12 <- plot(q12, 
+     type = "bar",
+     wrap = 27,
+     legend.position = "none",
+     legend = element_blank(),
+     text.size=text.size,
+     include.histogram = FALSE)
+
+
+xpq09 <- plot(q09, 
+     type = "bar",
+     wrap = 20,
+     #legend.position = c(0.3, 0.7),
+     legend.position = c("none"),
+     legend = element_blank(),
+     #likert.options = 
+     text.size=text.size,
+     include.histogram = FALSE
+) 
+
+xpq22 <- ggplot(data)
+xpq22 <- xpq22 + geom_bar(aes(x=Kys22Diagnosis))
+xpq22 <- xpq22 + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?") + ylab("Count")
+xpq22 <- xpq22 + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+xpq22 <- xpq22 + theme_bw()
+xpq22
+
+
+patch <-  (xpq09 |  xpq12) /  (xpq24 | xpq22) 
+
+ggsave(patch, 
+       filename = here("results/pub_plot01.png"),
+       width = 180, 
+       height=200,
+       units="mm"
+         )
+```
+
+
+```{r}
+items = data %>% 
+  select(Kys9Useful, 
+         Kys10Worry, 
+         Kys11HealthPromotion,
+         Kys12Trust, 
+         Kys13MembertoBiobank,
+         Kys24Influence, 
+         Kys25Motivation
+         ) %>% as.data.frame()
+colnames(items) <- c(
+  "It was useful to receive genetic information",
+  "Receiving genetic information did not worry me",
+  "The genome data in biobank should be used more widely to promote health",
+  "How has receiving genetic information affected on your confidence in Blood Service?",
+  "How has receiving genetic information affected your willingness to belong to Blood Service Biobank?",
+  "I believe I can make an impact with my lifestyle to my predisposition to hemochromatosis",
+  "Receiving genetic information motivates me to take care of my health better"
+
+)
+
+
+nlevels = 5
+ppq <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+)
+
+ppq <- plot(ppq, 
+     type = "bar",
+     wrap = 25,
+     #legend.position = c(0.3, 0.7),
+     legend.position = c("bottom"),
+     legend = element_blank(),
+     #likert.options = 
+     text.size=text.size,
+     include.histogram = FALSE
+)
+ppq
+```
+
+
+```{r}
+ggsave(ppq, 
+       filename = here("results/pub_plot02.png"),
+       width = 180, 
+       height=160,
+       units="mm"
+         )
+
+ggsave(ppq, 
+       filename = here("results/pub_plot02.pdf"),
+       width = 180, 
+       height=160,
+       units="mm"
+         )
+
+
+```
+
+
 
 # Correlation matrix
 
