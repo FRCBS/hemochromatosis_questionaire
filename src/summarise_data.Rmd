@@ -1000,9 +1000,10 @@ labsum <- data %>%
       is.na(Kys20bFerrit) ~ NA,
       Kys20bFerrit < 15  & Kys2Gender == "Female" ~ "below",
       Kys20bFerrit < 20  & Kys2Gender == "Male"  ~ "below",
-      Kys20bFerrit > 50 ~ "above",
-      (Kys20bFerrit >= 15 & Kys20bFerrit <=50) & Kys2Gender == "Female"   ~ "normal",
-      (Kys20bFerrit >= 20 & Kys20bFerrit <=50) & Kys2Gender == "Male"   ~ "normal",
+      Kys20bFerrit > 125  & Kys2Gender == "Female" ~ "above",
+      Kys20bFerrit > 195  & Kys2Gender == "Male"  ~ "above",
+      (Kys20bFerrit >= 15 & Kys20bFerrit <=125) & Kys2Gender == "Female"   ~ "normal",
+      (Kys20bFerrit >= 20 & Kys20bFerrit <=195) & Kys2Gender == "Male"   ~ "normal",
       TRUE ~ NA),
       #https://diagnostiikka.hus.fi/tutkimus?id=8855
     TrfSat_HUScut = case_when(
@@ -1097,7 +1098,7 @@ labsumsum <- labsum %>%   group_by(Kys2Gender) %>%
   ) %>%  
   mutate(
     Statistic = factor(Statistic, labels =c("Above","Below","Median","MAD"))
-  )
+  ) 
 labsumsum
 
 ```
@@ -1107,6 +1108,31 @@ write_tsv(
   labsumsum,
   file = here("results/labsum.tsv")
 )
+```
+
+
+```{r}
+
+data %>%
+  mutate(
+    Fe = case_when(
+      is.na(Kys20bFerrit) ~ NA,
+      Kys20bFerrit > 50 ~ "above",
+      TRUE ~ NA)
+    )%>% filter(Fe == "above") %>% nrow()
+
+```
+
+```{r}
+
+data %>%
+  mutate(
+    TrfSat = case_when(
+      is.na(Kys20cTrfesat) ~ NA,
+      Kys20cTrfesat > 30 ~ "above",
+      TRUE ~ NA)
+    )%>% filter(TrfSat == "above") %>% nrow()
+
 ```
 
 
