@@ -3,7 +3,8 @@ Analysis on questionnaire data of blood donors' perceptions of receiving informa
 The analysis was part of master's thesis by Elina Koskinen.
 
 Koskinen, Elina: Blood donors’ perceptions of receiving genetic results from Blood Service Biobank
-## linkki tähän
+## http://urn.fi/urn:nbn:fi:uef-20250392
+
 
 ## Abstract:
 As the use of genetic information becomes more common in healthcare, it is important to understand how citizens perceive genetic information about themselves and its reception. Genetic data is returned to biobanks through various research projects. The return of genetic data raises ethical questions about what should be returned to the study subjects, how it should be done, and by whom.
