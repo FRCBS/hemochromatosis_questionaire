@@ -9,6 +9,12 @@ output:
 ---
 
 
+TODO:
+
+- Table 1 =< 3 pienten lukujen tilalle
+- yhdistelmä kuva vastauksista (A (grown), b (agree), c (diag), d (tiesti))
+- violin mediaani viivalla ja harmaa tausta pois
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -24,7 +30,6 @@ library(here)
 library(ggcorrplot)
 library(GGally)
 library(patchwork)
-#library(responsesR)
 
 ```
 
@@ -71,7 +76,7 @@ data <-  data %>%
       Kys9Useful,
       ordered = TRUE,
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
     ),
     Kys10Worry = factor(
       Kys10Worry,
@@ -79,7 +84,7 @@ data <-  data %>%
       #First you specify the levels in the original data , in the order that you want them to be
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
       #Then you specify new names for them
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
       # > tmp$Kys10Worry
       #...
       # Levels: Totally agree < Partly agree < Neutral < Partly disagree < Totally disagree
@@ -94,42 +99,42 @@ data <-  data %>%
       Kys11HealthPromotion,
       ordered = TRUE,
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
     ),
     
     Kys16Flexibility = factor(
       Kys16Flexibility,
       ordered = TRUE,
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
     ),
     
     Kys17Support = factor(
       Kys17Support,
       ordered = TRUE,
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
     ),
     
     Kys18Answers = factor(
       Kys18Answers,
       ordered = TRUE,
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
     ),
     
     Kys24Influence = factor(
       Kys24Influence,
       ordered = TRUE,
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
     ),
     
     Kys25Motivation = factor(
       Kys25Motivation,
       ordered = TRUE,
       levels = rev(c("Strongly agree","Partly agree","Neither agree nor disagree","Partly disagree","Strongly disagree")),
-      labels =  rev(c("Totally agree","Partly agree","Neutral","Partly disagree","Totally disagree"))
+      labels =  rev(c("Totally\nagree","Partly\nagree","Neutral","Partly\ndisagree","Totally\ndisagree"))
     ),
     
     Kys5HowOften = factor(
@@ -161,14 +166,14 @@ data <-  data %>%
       Kys12Trust,
       ordered = TRUE,
       levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")),
-      labels =  rev(c("Grown","Partly grown","Has not affected","Partly decreased","Decreased"))
+      labels =  rev(c("Grown","Partly\ngrown","Has not\naffected","Partly\ndecreased","Decreased"))
     ),
     
     Kys13MembertoBiobank = factor(
       Kys13MembertoBiobank,
       ordered = TRUE,
       levels = rev(c("Grown", "Partly grown", "Have not affected", "Partly decreased", "Decreased")),
-      labels =  rev(c("Grown","Partly grown","Has not affected","Partly decreased","Decreased"))
+      labels =  rev(c("Grown","Partly\ngrown","Has not\naffected","Partly\ndecreased","Decreased"))
     ),
     
     Kys14Healthcare = factor(
@@ -1113,6 +1118,38 @@ write_tsv(
 
 ```{r}
 
+longlab <- pivot_longer(
+  data %>%  select(Kys2Gender, Kys20bFerrit, Kys20cTrfesat, Kys20dHemoglobin, Kys20eMCV, Kys20fALAT),
+  cols = starts_with("Kys20"),
+  names_to = "Measurement",
+  values_to = "Value"
+) %>% na.omit() %>% 
+  mutate(
+    Measurement = fct_recode(
+      Measurement,
+      'Ferrin ug/L' = "Kys20bFerrit", 
+       'Transferrin Saturation (%)'  = "Kys20cTrfesat", 
+     'Haemoglobin (g/L)'=  "Kys20dHemoglobin", 
+      'eMCV (fl)' = "Kys20eMCV", 
+      'Alanine aminotransferase (U/L)' ="Kys20fALAT"
+    )
+  ) %>% 
+  rename(Sex = Kys2Gender)
+
+p <- ggplot(longlab)
+p <- p + geom_violin(aes(y=Value,x=Sex))
+#p <- p  + geom_boxplot(aes(y=Value,x=Sex),alpha=0.5)
+p <- p + facet_wrap(.~Measurement,scales = "free")
+
+p
+```
+
+
+
+
+
+```{r}
+
 data %>%
   mutate(
     Fe = case_when(
@@ -1266,64 +1303,41 @@ ggsave(plot = p,filename = "../results/q26.png", dpi = 600,width =  160, height 
 
 
 ```{r}
+text.size <- 2.5
+nlevels = 5
+wrap = 25
 
-text.size <- 3
+#Separate A:
+#Kys12Trust, 
+#Kys13MembertoBiobank,
+# grown, partly grown, neutral, partly decreased, decreased
 
-xpq24 <- plot(q24, 
-     type = "bar",
-     wrap = 20,
-     legend.position = "bottom",
-     legend = element_blank(),
-     text.size=text.size,
-     include.histogram = FALSE)
-
-
-xpq12 <- plot(q12, 
-     type = "bar",
-     wrap = 27,
-     legend.position = "none",
-     legend = element_blank(),
-     text.size=text.size,
-     include.histogram = FALSE)
-
-
-xpq09 <- plot(q09, 
-     type = "bar",
-     wrap = 20,
-     #legend.position = c(0.3, 0.7),
-     legend.position = c("none"),
-     legend = element_blank(),
-     #likert.options = 
-     text.size=text.size,
-     include.histogram = FALSE
+items = data %>% 
+  select(Kys12Trust, 
+         Kys13MembertoBiobank,
+         ) %>% as.data.frame() 
+colnames(items) <- c(
+  "How has receiving genetic information affected on your confidence in Blood Service?",
+  "How has receiving genetic information affected your willingness to belong to Blood Service Biobank?"
 ) 
 
-xpq22 <- ggplot(data)
-xpq22 <- xpq22 + geom_bar(aes(x=Kys22Diagnosis))
-xpq22 <- xpq22 + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?") + ylab("Count")
-xpq22 <- xpq22 + theme(plot.margin = unit(c(1,2,1,2),"cm"))
-xpq22 <- xpq22 + theme_bw()
-xpq22
+items <- likert(
+  items = as.data.frame(items),
+  nlevels = nlevels
+)
+
+plota <- plot(items, 
+     type = "bar",
+     wrap = wrap,
+     legend.position = "bottom",
+     text.size=text.size,
+     include.histogram = FALSE)
 
 
-patch <-  (xpq09 |  xpq12) /  (xpq24 | xpq22) 
-
-ggsave(patch, 
-       filename = here("results/pub_plot01.png"),
-       width = 180, 
-       height=200,
-       units="mm"
-         )
-```
-
-
-```{r}
 items = data %>% 
   select(Kys9Useful, 
          Kys10Worry, 
          Kys11HealthPromotion,
-         Kys12Trust, 
-         Kys13MembertoBiobank,
          Kys24Influence, 
          Kys25Motivation
          ) %>% as.data.frame()
@@ -1331,51 +1345,76 @@ colnames(items) <- c(
   "It was useful to receive genetic information",
   "Receiving genetic information did not worry me",
   "The genome data in biobank should be used more widely to promote health",
-  "How has receiving genetic information affected on your confidence in Blood Service?",
-  "How has receiving genetic information affected your willingness to belong to Blood Service Biobank?",
   "I believe I can make an impact with my lifestyle to my predisposition to hemochromatosis",
   "Receiving genetic information motivates me to take care of my health better"
 
 )
-
-
-nlevels = 5
-ppq <- likert(
+items <- likert(
   items = as.data.frame(items),
   nlevels = nlevels
 )
-
-ppq <- plot(ppq, 
+plotb <- plot(items, 
      type = "bar",
-     wrap = 25,
-     #legend.position = c(0.3, 0.7),
-     legend.position = c("bottom"),
-     legend = element_blank(),
-     #likert.options = 
+     wrap = wrap,
+#     legend.position = c(1.1,0.7),
+     legend.position = "bottom",
      text.size=text.size,
-     include.histogram = FALSE
+     include.histogram = FALSE)
+
+# C kuinka moni tiesi
+tmp <- tibble(x=c("Contacted","Responded","Knew\nalready"),y=c(82,63,6))
+
+plotc <- ggplot(tmp)
+plotc <- plotc + geom_col(aes(x=x,y=y))
+plotc <- plotc + ylab("") + xlab("Questionaire contact")
+plotc <- plotc + xlim(
+  "Contacted","Responded","Knew\nalready")
+plotc <- plotc + theme(plot.margin = unit(c(1,2,1,2),"cm"))
+plotc <- plotc + theme_bw() +  theme(axis.text.x=element_text(angle=45, hjust=1))
+
+
+plotd <- ggplot(data %>%
+                mutate(
+                  Kys22Diagnosis = case_when(is.na(Kys22Diagnosis) ~ "No response",
+                   TRUE ~  Kys22Diagnosis
+                  )
+                )
 )
-ppq
+plotd <- plotd + geom_bar(aes(x=Kys22Diagnosis))
+plotd <- plotd + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?") + ylab("Count")
+plotd <- plotd + theme(plot.margin = unit(c(1,2,1,2),"cm")) + xlim(
+  "Yes","No","Don't know","No response")
+plotd <- plotd + theme_bw()+  theme(axis.text.x=element_text(angle=45, hjust=1))
+
+
+
+patch <-  (( plotc |  plotd |plot_spacer()) /  plota /  plotb  ) +
+ plot_layout(widths = c(1, 5,5), heights = c(1,1,2)) + plot_annotation(tag_levels = 'A')
+patch
 ```
 
 
 ```{r}
-ggsave(ppq, 
+width <- 180
+height <- 260
+ggsave(patch, 
        filename = here("results/pub_plot02.png"),
-       width = 180, 
-       height=160,
+       width = width, 
+       height=height,
        units="mm"
          )
 
-ggsave(ppq, 
+ggsave(patch, 
        filename = here("results/pub_plot02.pdf"),
-       width = 180, 
-       height=160,
+       width = width, 
+       height=height,
        units="mm"
          )
 
 
 ```
+
+
 
 
 
