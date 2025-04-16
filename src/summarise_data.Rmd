@@ -12,7 +12,7 @@ output:
 TODO:
 
 - Table 1 =< 3 pienten lukujen tilalle
-- yhdistelmä kuva vastauksista (A (grown), b (agree), c (diag), d (tiesti))
+
 - violin mediaani viivalla ja harmaa tausta pois
 
 
@@ -1116,6 +1116,8 @@ write_tsv(
 ```
 
 
+# Pub pic 1
+
 ```{r}
 
 longlab <- pivot_longer(
@@ -1136,12 +1138,34 @@ longlab <- pivot_longer(
   ) %>% 
   rename(Sex = Kys2Gender)
 
-p <- ggplot(longlab)
-p <- p + geom_violin(aes(y=Value,x=Sex))
+p <- ggplot(longlab,aes(y=Value,x=Sex))
+p <- p + geom_violin()
 #p <- p  + geom_boxplot(aes(y=Value,x=Sex),alpha=0.5)
-p <- p + facet_wrap(.~Measurement,scales = "free")
+p <- p + facet_grid(Measurement~.,scales = "free")
+p <- p + stat_summary(fun = "median", fun.min = "median", fun.max= "median", size= 0.3, geom = "crossbar")
+p <- p + ylab("Measurement")
 
 p
+```
+
+```{r}
+width <- 80
+height <- 200
+ggsave(p, 
+       filename = here("results/pub_plot01.png"),
+       width = width, 
+       height=height,
+       units="mm"
+         )
+
+ggsave(p, 
+       filename = here("results/pub_plot01.pdf"),
+       width = width, 
+       height=height,
+       units="mm"
+         )
+
+
 ```
 
 
@@ -1299,7 +1323,7 @@ ggsave(plot = p,filename = "../results/q26.png", dpi = 600,width =  160, height 
 
 ```
 
-# Pub pic
+# Pub pic 2
 
 
 ```{r}
