@@ -1052,10 +1052,10 @@ labsum <- data %>%
 #https://diagnostiikka.hus.fi/tutkimus?id=1024
     fALAT_HUScut =case_when( 
       is.na(Kys20fALAT) ~ NA,
-      Kys20fALAT < 35  & Kys2Gender == "Female" ~ "below",
-      Kys20fALAT < 50  & Kys2Gender == "Male"  ~ "below",
-      (Kys20fALAT >= 35 ) & Kys2Gender == "Female"   ~ "normal",
-      (Kys20fALAT >= 50 ) & Kys2Gender == "Male"   ~ "normal",
+      Kys20fALAT < 35  & Kys2Gender == "Female" ~ "normal",
+      Kys20fALAT < 50  & Kys2Gender == "Male"  ~ "normal",
+      (Kys20fALAT >= 35 ) & Kys2Gender == "Female"   ~ "above",
+      (Kys20fALAT >= 50 ) & Kys2Gender == "Male"   ~ "above",
       TRUE ~ NA)
   ) %>% select(Kys1Age, 
                Kys2Gender,
@@ -1140,22 +1140,58 @@ longlab <- pivot_longer(
   mutate(
     Measurement = fct_recode(
       Measurement,
-      'Ferrin ug/L' = "Kys20bFerrit", 
-       'Transferrin Saturation (%)'  = "Kys20cTrfesat", 
+      'Ferritin ug/L' = "Kys20bFerrit", 
+       'Transferrin\nSaturation (%)'  = "Kys20cTrfesat", 
      'Haemoglobin (g/L)'=  "Kys20dHemoglobin", 
       'eMCV (fl)' = "Kys20eMCV", 
-      'Alanine aminotransferase (U/L)' ="Kys20fALAT"
+      'Alanine\naminotransferase (U/L)' ="Kys20fALAT"
     )
   ) %>% 
   rename(Sex = Kys2Gender)
 
+
+
+refvals <-       bind_rows(
+      c(Measurement='Ferritin ug/L',Value=15  , Sex="Female",Limit="Lower"),
+      c(Measurement='Ferritin ug/L',Value=20  ,  Sex="Male" ,Limit="Lower" ),
+      c(Measurement='Ferritin ug/L', Value=125  ,Sex="Female",Limit="Upper"),
+      c(Measurement='Ferritin ug/L' ,Value=195  , Sex="Male",Limit="Upper" ),
+
+      c(Measurement='Transferrin\nSaturation (%)' , Value=17,Sex="Female" ,Limit="Lower" ),
+      c(Measurement='Transferrin\nSaturation (%)' , Value=52,Sex="Female",Limit="Upper"),
+      c(Measurement='Transferrin\nSaturation (%)' , Value=17,Sex="Male"  ,Limit="Lower"),
+      c(Measurement='Transferrin\nSaturation (%)' , Value=52,Sex="Male",Limit="Upper"),
+
+      c(Measurement='Haemoglobin (g/L)', Value= 117  , Sex = "Female",Limit="Lower"),
+      c(Measurement='Haemoglobin (g/L)', Value= 134  , Sex = "Male",Limit="Lower"),
+      c(Measurement='Haemoglobin (g/L)', Value= 155  , Sex = "Female",Limit="Upper"), 
+      c(Measurement='Haemoglobin (g/L)', Value= 167  , Sex = "Male",Limit="Upper"),
+      
+      
+      c(Measurement='eMCV (fl)' , Value= 82  , Sex= "Female",Limit="Lower"),
+      c(Measurement='eMCV (fl)' , Value= 82  , Sex= "Male",Limit="Lower"),
+      c(Measurement='eMCV (fl)', Value= 98  , Sex= "Female",Limit="Upper"),
+      c(Measurement='eMCV (fl)', Value= 98  , Sex= "Male",Limit="Upper" ),
+     
+
+      c(Measurement='Alanine\naminotransferase (U/L)', Value= 35  , Sex = "Female",Limit="Upper") ,
+      c(Measurement='Alanine\naminotransferase (U/L)',Value= 50  , Sex= "Male"  ,Limit="Upper")
+      ) %>% 
+  mutate(
+    Value = as.numeric(Value)
+  )
+     
+
+
+
 p <- ggplot(longlab,aes(y=Value,x=Sex))
 p <- p + geom_violin()
 #p <- p  + geom_boxplot(aes(y=Value,x=Sex),alpha=0.5)
-p <- p + facet_grid(Measurement~.,scales = "free")
+p <- p + facet_grid(Measurement~ .,scales = "free")
 p <- p + stat_summary(fun = "median", fun.min = "median", fun.max= "median", size= 0.3, geom = "crossbar")
 p <- p + ylab("Measurement")  + theme_bw()
-
+p <- p + geom_point(data=refvals,aes(y=Value,x=Sex,col=Limit),shape=95,size=10)
+p <- p + theme(legend.position="bottom")
 p
 ```
 
