@@ -562,8 +562,8 @@ dev.off()
 items = data %>% 
   select(Kys12Trust, Kys13MembertoBiobank) %>% as.data.frame()
 colnames(items) <- c(
-  "How has receiving genetic information affected on your confidence in Blood Service?",
-  "How has receiving genetic information affected your willingness to belong to Blood Service Biobank?"
+  "How has receiving genetic information affected your trust in The Blood Service?",
+  "How has receiving genetic information affected your willingness to belong to The Blood Service Biobank?"
 )
 
 nlevels = 5
