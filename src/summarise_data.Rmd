@@ -1178,7 +1178,8 @@ refvals <-       bind_rows(
       c(Measurement='Alanine\naminotransferase (U/L)',Value= 50  , Sex= "Male"  ,Limit="Upper")
       ) %>% 
   mutate(
-    Value = as.numeric(Value)
+    Value = as.numeric(Value),
+    Measurement = as.ordered(Measurement)
   )
      
 
@@ -1191,7 +1192,7 @@ p <- p + facet_grid(Measurement~ .,scales = "free")
 p <- p + stat_summary(fun = "median", fun.min = "median", fun.max= "median", size= 0.3, geom = "crossbar")
 p <- p + ylab("Measurement")  + theme_bw()
 p <- p + geom_point(data=refvals,aes(y=Value,x=Sex,col=Limit),shape=95,size=10)
-p <- p + theme(legend.position="bottom")
+p <- p + theme(legend.position="bottom") + scale_color_discrete(name = "Reference\ninterval")
 p
 ```
 
@@ -1433,30 +1434,42 @@ plotb <- plot(items,
      include.histogram = FALSE)
 
 # C kuinka moni tiesi
-tmp <- tibble(x=c("Contacted","Responded","Knew\nalready"),y=c(82,63,6))
+tmp <- tibble(x=c("Contacted","Responded","Was\naware"),y=c(82,63,6)) #%>% 
+  # mutate(
+  #   pn =  str_c(round(y / sum(y)*100,0)," %")
+  # )
 
-plotc <- ggplot(tmp)
-plotc <- plotc + geom_col(aes(x=x,y=y))
-plotc <- plotc + ylab("") + xlab("Questionaire contact")
+plotc <- ggplot(tmp,aes(x=x,y=y))
+plotc <- plotc + geom_col(fill="grey",alpha=0.6)
+#plotc <- plotc + geom_text(aes(label=pn)) 3 they don't sum up
+plotc <- plotc + ylab("") + xlab("Initial contact")
 plotc <- plotc + xlim(
-  "Contacted","Responded","Knew\nalready")
+  "Contacted","Responded","Was\naware")
 plotc <- plotc + theme(plot.margin = unit(c(1,2,1,2),"cm"))
-plotc <- plotc + theme_bw() +  theme(axis.text.x=element_text(angle=45, hjust=1))
+plotc <- plotc + theme_classic() +  theme(axis.text.x=element_text(angle=45, hjust=1))
+plotc
 
-
-plotd <- ggplot(data %>%
-                mutate(
-                  Kys22Diagnosis = case_when(is.na(Kys22Diagnosis) ~ "No response",
-                   TRUE ~  Kys22Diagnosis
-                  )
+tmp <- data %>%
+  mutate(
+    Kys22Diagnosis = case_when(is.na(Kys22Diagnosis) ~ "No response",
+                               TRUE ~  Kys22Diagnosis
+    ) 
+    )%>% 
+      count(Kys22Diagnosis) %>% 
+  mutate(
+    pn = str_c(round(n / sum(n)*100,0)," %")
+  )
+    
+plotd <- ggplot(tmp,
+                  aes(x=Kys22Diagnosis,y=n)
                 )
-)
-plotd <- plotd + geom_bar(aes(x=Kys22Diagnosis))
-plotd <- plotd + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?") + ylab("Count")
+plotd <- plotd + geom_col(fill="grey",alpha=0.6)
+plotd <- plotd + geom_text(aes(label=pn))
+plotd <- plotd + xlab("Did you recieve clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?") + ylab("Count")
 plotd <- plotd + theme(plot.margin = unit(c(1,2,1,2),"cm")) + xlim(
   "Yes","No","Don't know","No response")
-plotd <- plotd + theme_bw()+  theme(axis.text.x=element_text(angle=45, hjust=1))
-
+plotd <- plotd + theme_classic() +  theme(axis.text.x=element_text(angle=45, hjust=1))
+#plotd
 
 
 patch <-  (( plotc |  plotd |plot_spacer()) /  plota /  plotb  ) +
