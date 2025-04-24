@@ -1,5 +1,5 @@
 ---
-title: "Summary of hemochromatosis questionnaire answers"
+title: "Summary of haemochromatosis questionnaire answers"
 author: "Elina Koskinen, Jonna Clancy and Mikko Arvas"
 date: "`r Sys.time()`"
 output:
@@ -804,7 +804,7 @@ table1
 items = data %>% 
   select(Kys24Influence, Kys25Motivation) %>% as.data.frame()
 colnames(items) <- c(
-  "I believe I can make an impact with my lifestyle to my predisposition to hemochromatosis",
+  "I believe I can make an impact with my lifestyle to my predisposition to haemochromatosis",
   "Receiving genetic information motivates me to take care of my health better"
 )
 
@@ -949,7 +949,7 @@ limits <- tibble(Kys2Gender = c("Male", "Male", "Female", "Female"),Kys20dHemogl
 p <- ggplot(data)
 p <- p + geom_histogram(aes(x=Kys20dHemoglobin), binwidth = 5)
 p <- p + facet_wrap(. ~ Kys2Gender)
-p <- p + xlab("Hemoglobin g/l") + xlim(110,180)
+p <- p + xlab("Haemoglobin g/l") + xlim(110,180)
 p <-  p + geom_vline(data=limits,aes(xintercept= Kys20dHemoglobin), col="red")
 p <- p + theme_bw()
 #p <- p + scale_x_log10() + geom_vline(aes(xintercept = 15, col = "red")) + geom_vline(aes(xintercept = 100, col = "red"))
@@ -1347,7 +1347,7 @@ ggsave(plot = p,filename = "../results/q14.png", dpi = 600,width =  160, height 
 
 pq22 <- ggplot(data)
 pq22 <- pq22 + geom_bar(aes(x=Kys22Diagnosis))
-pq22 <- pq22 + xlab("Did you get a clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?")
+pq22 <- pq22 + xlab("Did you get a clinical diagnosis\nfor haemochromatosis (ICD10: E83.1)?")
 pq22 <- pq22 + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 pq22 <- pq22 + theme_bw()
 pq22
@@ -1360,7 +1360,7 @@ ggsave(plot = pq22,filename = "../results/q22.png", dpi = 600,width =  160, heig
 
 p <- ggplot(data)
 p <- p + geom_bar(aes(x=Kys26aFamily))
-p <- p + xlab("I have discussed about my predisposition\nto hemochromatosis with my close relatives.")
+p <- p + xlab("I have discussed about my predisposition\nto haemochromatosis with my close relatives.")
 p <- p + theme(plot.margin = unit(c(1,2,1,2),"cm"))
 p <- p + scale_x_discrete(drop = FALSE)
 p <- p + theme_bw()
@@ -1389,8 +1389,8 @@ items = data %>%
          Kys13MembertoBiobank,
          ) %>% as.data.frame() 
 colnames(items) <- c(
-  "How has receiving genetic information affected on your confidence in Blood Service?",
-  "How has receiving genetic information affected your willingness to belong to Blood Service Biobank?"
+  "How has receiving genetic information affected your trust in The Blood Service?",
+  "How has receiving genetic information affected your willingness to belong to The Blood Service Biobank?"
 ) 
 
 items <- likert(
@@ -1414,11 +1414,11 @@ items = data %>%
          Kys25Motivation
          ) %>% as.data.frame()
 colnames(items) <- c(
-  "It was useful to receive genetic information",
-  "Receiving genetic information did not worry me",
-  "The genome data in biobank should be used more widely to promote health",
-  "I believe I can make an impact with my lifestyle to my predisposition to hemochromatosis",
-  "Receiving genetic information motivates me to take care of my health better"
+  "It was useful to receive genetic information.",
+  "Receiving genetic information did not worry me.",
+  "The genome data in biobank should be used more widely to promote health.",
+  "I believe I can make an impact to my predisposition to haemochromatosis with my lifestyle.",
+  "Receiving genetic information motivates me to take care of my health better."
 
 )
 items <- likert(
@@ -1434,14 +1434,14 @@ plotb <- plot(items,
      include.histogram = FALSE)
 
 # C kuinka moni tiesi
-tmp <- tibble(x=c("Contacted","Responded","Was\naware"),y=c(82,63,6)) #%>% 
-  # mutate(
-  #   pn =  str_c(round(y / sum(y)*100,0)," %")
-  # )
+tmp <- tibble(x=c("Contacted","Responded","Was\naware"),y=c(82,63,6)) %>% 
+   mutate(
+     pn =  str_c(round(y / sum(y)*100,0)," %")
+   )
 
 plotc <- ggplot(tmp,aes(x=x,y=y))
 plotc <- plotc + geom_col(fill="grey",alpha=0.6)
-#plotc <- plotc + geom_text(aes(label=pn)) 3 they don't sum up
+#plotc <- plotc + geom_text(aes(label=pn)) #3 they don't sum up
 plotc <- plotc + ylab("") + xlab("Initial contact")
 plotc <- plotc + xlim(
   "Contacted","Responded","Was\naware")
@@ -1464,8 +1464,8 @@ plotd <- ggplot(tmp,
                   aes(x=Kys22Diagnosis,y=n)
                 )
 plotd <- plotd + geom_col(fill="grey",alpha=0.6)
-plotd <- plotd + geom_text(aes(label=pn))
-plotd <- plotd + xlab("Did you recieve clinical diagnosis\nfor hemochromatosis (ICD10: E83.1)?") + ylab("Count")
+#plotd <- plotd + geom_text(aes(label=pn))
+plotd <- plotd + xlab("Did you recieve clinical diagnosis\nfor haemochromatosis (ICD10: E83.1)?") + ylab("Count")
 plotd <- plotd + theme(plot.margin = unit(c(1,2,1,2),"cm")) + xlim(
   "Yes","No","Don't know","No response")
 plotd <- plotd + theme_classic() +  theme(axis.text.x=element_text(angle=45, hjust=1))
