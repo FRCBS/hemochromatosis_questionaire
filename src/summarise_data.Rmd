@@ -1209,7 +1209,7 @@ p <- p + facet_grid(Measurement~ .,scales = "free")
 p <- p + stat_summary(fun = "median", fun.min = "median", fun.max= "median", size= 0.3, geom = "crossbar")
 p <- p + ylab("Measurement")  + theme_bw()
 p <- p + geom_point(data=refvals,aes(y=Value,x=Sex,col=Limit),shape=95,size=10)
-p <- p + geom_text(data=refvals %>% filter(Limit == "Upper") ,aes(y=Value,x=Sex,label=n),hjust=-0.6,vjust=-0.9,size=3,color="red")
+#p <- p + geom_text(data=refvals %>% filter(Limit == "Upper") ,aes(y=Value,x=Sex,label=n),hjust=-0.6,vjust=-0.9,size=3,color="red")
 p <- p + theme(legend.position="bottom") + scale_color_discrete(name = "Reference\ninterval")
 p
 ```
