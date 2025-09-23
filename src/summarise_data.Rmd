@@ -1520,6 +1520,66 @@ ggsave(patch,
        units="mm"
          )
 
+ggsave(plotc, 
+       filename = here("results/pub_plotA.png"),
+       width = 80, 
+       height=80,
+       units="mm"
+         )
+
+ggsave(plotc, 
+       filename = here("results/pub_plotA.pdf"),
+       width = 80, 
+       height=80,
+       units="mm"
+         )
+
+
+ggsave(plotd, 
+       filename = here("results/pub_plotB.png"),
+       width = 80, 
+       height=80,
+       units="mm"
+         )
+
+ggsave(plotd, 
+       filename = here("results/pub_plotB.pdf"),
+       width = 80, 
+       height=80,
+       units="mm"
+         )
+
+
+ggsave(plota, 
+       filename = here("results/pub_plotC.png"),
+       width = 180, 
+       height=80,
+       units="mm"
+         )
+
+ggsave(plota, 
+       filename = here("results/pub_plotC.pdf"),
+       width = 180, 
+       height=80,
+       units="mm"
+         )
+
+
+ggsave(plotb, 
+       filename = here("results/pub_plotD.png"),
+       width = 180, 
+       height=120,
+       units="mm"
+         )
+
+ggsave(plotb, 
+       filename = here("results/pub_plotD.pdf"),
+       width = 180, 
+       height=120,
+       units="mm"
+         )
+
+
 
 ```
 
